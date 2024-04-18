@@ -18,11 +18,16 @@ class QWMain : public QMainWindow
 public:
     QWMain(QWidget *parent = nullptr);
     ~QWMain();
+private slots:
+    void createnavbar();
 
 public slots:
     void ShowMain();
     void ShowFavourite();
     void ShowSettings();
+    void ShowContact();
+    void ShowAdd();
+    void BackMain();
 
 private:
     Ui::QWMainClass ui;
@@ -30,4 +35,5 @@ private:
     QWidget* wmain;
     QWidget* wfavourite;
     QWidget* wsettings;
+    QWidget* wcontactbg;
 };

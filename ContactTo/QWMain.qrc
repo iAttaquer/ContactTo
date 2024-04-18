@@ -1,4 +1,11 @@
 <RCC>
-    <qresource prefix="QWMain">
+    <qresource prefix="/images">
+        <file>images/plus_icon.svg</file>
+        <file>images/back_icon.svg</file>
+        <file>images/mainbook_icon.svg</file>
+        <file>images/settings_icon.svg</file>
+        <file>images/star_icon.svg</file>
+        <file>images/trash_icon.svg</file>
+        <file>images/edit_icon.svg</file>
     </qresource>
 </RCC>
