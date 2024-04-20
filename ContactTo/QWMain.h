@@ -21,6 +21,7 @@ public:
     ~QWMain();
 private slots:
     void createnavbar();
+    void createwadd();
 
 public slots:
     void ShowMain();
@@ -37,6 +38,7 @@ private:
     QWidget* navbar = nullptr;
     QWidget* wmain = nullptr;
     QWidget* wfavourite = nullptr;
+    QWidget* waddbg = nullptr;
     QWidget* wsettings = nullptr;
     QWidget* wcontactbg = nullptr;
     QWidget* weditbg = nullptr;
