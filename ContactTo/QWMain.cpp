@@ -149,24 +149,28 @@ void QWMain::createnavbar()
     navbar->setGeometry(QRect(0, 0, 600, 50));
     navbar->setStyleSheet(
         "QWidget {"
-        "align-items: center;"
         "background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);"
         "}"
         "QPushButton {"
-        "    color: #9FAABF;"
-        "    background-color: #23272F;"
-        "    border-radius: 12px;}"
+        "   max-width: 110px;"
+        "   min-width: 110px;"
+        "   max-height: 35px;"
+        "   min-height: 35px;"
+        "   font-family: Poppins;"
+        "   font-size: 12pt;"
+        "   font-weight: bold;"
+        "   color: #9FAABF;"
+        "   background-color: #23272F;"
+        "   border-radius: 12px;}"
         "QPushButton:hover {"
-        "    color: #fff;"
-        "    background-color: #2B303B;"
+        "   color: #fff;"
+        "   background-color: #2B303B;"
         "}");
     QHBoxLayout* nlayout = new QHBoxLayout(navbar);
 
     QPushButton* main = new QPushButton();
     main->setIcon(QIcon(":/images/images/mainbook_icon.svg"));
     main->setText(" Main");
-    main->setFont(QFont("Poppins", 12, QFont::Bold));
-    main->setFixedSize(QSize(110, 35));
     connect(main, SIGNAL(clicked()), this, SLOT(ShowMain()));
     nlayout->addWidget(main);
 
@@ -174,24 +178,18 @@ void QWMain::createnavbar()
     favourite->setIcon(QIcon(":/images/images/star_icon.svg"));
     favourite->setIconSize(QSize(18, 18));
     favourite->setText(" Favourite");
-    favourite->setFont(QFont("Poppins", 12, QFont::Bold));
-    favourite->setFixedSize(QSize(110, 35));
     connect(favourite, SIGNAL(clicked()), this, SLOT(ShowFavourite()));
     nlayout->addWidget(favourite);
 
     QPushButton* add = new QPushButton();
     add->setIcon(QIcon(":/images/images/plus_icon.svg"));
     add->setText(" Add");
-    add->setFont(QFont("Poppins", 12, QFont::Bold));
-    add->setFixedSize(QSize(110, 35));
 
     nlayout->addWidget(add);
 
     QPushButton* settings = new QPushButton();
     settings->setIcon(QIcon(":/images/images/settings_icon.svg"));
     settings->setText(" Settings");
-    settings->setFont(QFont("Poppins", 12, QFont::Bold));
-    settings->setFixedSize(QSize(110, 35));
     connect(settings, SIGNAL(clicked()), this, SLOT(ShowSettings()));
     nlayout->addWidget(settings);
 }
@@ -222,6 +220,10 @@ void QWMain::ShowSettings()
 		wsettings->show();
     }
 }
+void QWMain::ShowAdd()
+{
+    // TODO!!!
+}
 void QWMain::ShowContact()
 {
     if (wmain->isVisible())
@@ -232,7 +234,7 @@ void QWMain::ShowContact()
     {
         navbar->hide();
     }
-    if (wcontactbg)
+    if (!wcontactbg)
     {
         wcontactbg = new QWidget(this);
         wcontactbg->setGeometry(0, 0, 600, 450);
@@ -247,10 +249,8 @@ void QWMain::ShowContact()
         cnavbar->setFixedSize(550, 50);
         cnavbar->setStyleSheet(
             "QFrame {"
-            //"background-color: red;"
             "}"
             "QPushButton {"
-            //"   background-color: #23272F;"
         "}"
             "QPushButton:hover {"
             "   background-color: #2B303B;}"
@@ -265,6 +265,7 @@ void QWMain::ShowContact()
         cedit->setGeometry(450, 5, 40, 40);
         cedit->setIcon(QIcon(":/images/images/edit_icon.svg"));
         cedit->setIconSize(QSize(18, 18));
+        connect(cedit, SIGNAL(clicked()), this, SLOT(ShowEdit()));
 
         QPushButton* cdelete = new QPushButton(cnavbar);
         cdelete->setGeometry(500, 5, 40, 40);
@@ -274,115 +275,93 @@ void QWMain::ShowContact()
         clayout->setGeometry(0, 50, 550, 350);
         clayout->setStyleSheet(
             "QFrame {"
-            "background-color: #23272F;}"
+            "background-color: #23272F;"
+            "}"
             "QLabel {"
             "   color: #9FAABF;"
-            //"   background-color: #333742;"
-            //"   border-radius: 8px;"
+            "   font-family: Poppins;"
+            "   font-size: 10pt;"
+            "   text-align: center;"
+            "   qproperty-alignment: AlignCenter;"
             "}"
             "QPushButton {"
+            "   font-family: Poppins;"
+            "   font-size: 10pt;"
             "   background-color: #333742;"
             "   border-radius: 12px;"
             "}"
         );
         QLabel* cfirstnamelabel = new QLabel(clayout);
         cfirstnamelabel->setText("Firstname");
-        cfirstnamelabel->setFont(QFont("poppins", 10));
         cfirstnamelabel->setGeometry(20, 15, 150, 20);
-        cfirstnamelabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* clastnamelabel = new QLabel(clayout);
         clastnamelabel->setText("Lastname");
-        clastnamelabel->setFont(QFont("poppins", 10));
         clastnamelabel->setGeometry(200, 15, 150, 20);
-        clastnamelabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* cnicknamelabel = new QLabel(clayout);
         cnicknamelabel->setText("Nickname");
-        cnicknamelabel->setFont(QFont("poppins", 10));
         cnicknamelabel->setGeometry(380, 15, 150, 20);
-        cnicknamelabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* cidlabel = new QLabel(clayout);
         cidlabel->setText("ID");
-        cidlabel->setFont(QFont("poppins", 10));
         cidlabel->setGeometry(30, 95, 40, 20);
-        cidlabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* cnumberlabel = new QLabel(clayout);
         cnumberlabel->setText("Phone Number");
-        cnumberlabel->setFont(QFont("poppins", 10));
         cnumberlabel->setGeometry(130, 95, 150, 20);
-        cnumberlabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* chomenumberlabel = new QLabel(clayout);
         chomenumberlabel->setText("Home Number");
-        chomenumberlabel->setFont(QFont("poppins", 10));
         chomenumberlabel->setGeometry(340, 95, 150, 20);
-        chomenumberlabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* cemaillabel = new QLabel(clayout);
         cemaillabel->setText("Email");
-        cemaillabel->setFont(QFont("poppins", 10));
         cemaillabel->setGeometry(225, 175, 100, 20);
-        cemaillabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* ccompanylabel = new QLabel(clayout);
         ccompanylabel->setText("Company");
-        ccompanylabel->setFont(QFont("poppins", 10));
         ccompanylabel->setGeometry(80, 255, 150, 20);
-        ccompanylabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         QLabel* cpositionlabel = new QLabel(clayout);
         cpositionlabel->setText("Position");
-        cpositionlabel->setFont(QFont("poppins", 10));
         cpositionlabel->setGeometry(320, 255, 150, 20);
-        cpositionlabel->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 
         // data
         QPushButton* cfirstname = new QPushButton(clayout);
         cfirstname->setText("Imie");
-        cfirstname->setFont(QFont("poppins", 10));
         cfirstname->setGeometry(20, 36, 150, 25);
         
         QPushButton* clastname = new QPushButton(clayout);
         clastname->setText("Nazwisko");
-        clastname->setFont(QFont("poppins", 10));
         clastname->setGeometry(200, 36, 150, 25);
 
         QPushButton* cnickname = new QPushButton(clayout);
         cnickname->setText("Pseudonim");
-        cnickname->setFont(QFont("poppins", 10));
         cnickname->setGeometry(380, 36, 150, 25);
 
         QPushButton* cid = new QPushButton(clayout);
         cid->setText("id");
-        cid->setFont(QFont("poppins", 10));
         cid->setGeometry(30, 116, 40, 25);
 
         QPushButton* cnumber = new QPushButton(clayout);
         cnumber->setText("numer");
-        cnumber->setFont(QFont("poppins", 10));
         cnumber->setGeometry(130, 116, 150, 25);
 
         QPushButton* chomenumber = new QPushButton(clayout);
         chomenumber->setText("homenumber");
-        chomenumber->setFont(QFont("poppins", 10));
         chomenumber->setGeometry(340, 116, 150, 25);
 
         QPushButton* cemail = new QPushButton(clayout);
         cemail->setText("email");
-        cemail->setFont(QFont("poppins", 10));
         cemail->setGeometry(150, 196, 250, 25);
 
         QPushButton* ccompany = new QPushButton(clayout);
         ccompany->setText("company");
-        ccompany->setFont(QFont("poppins", 10));
         ccompany->setGeometry(55, 276, 200, 25);
 
         QPushButton* cposition = new QPushButton(clayout);
         cposition->setText("position");
-        cposition->setFont(QFont("poppins", 10));
         cposition->setGeometry(295, 276, 200, 25);
 
         wcontactbg->show();
@@ -390,16 +369,164 @@ void QWMain::ShowContact()
     //QMessageBox::warning(this, "Warning", "Coś nie działa");
 
 }
-void QWMain::ShowAdd()
+void QWMain::ShowEdit()
 {
-    // TODO!!!
+    if (wcontactbg->isVisible())
+    {
+        wcontactbg->hide();
+    }
+    if (!weditbg)
+    {
+        weditbg = new QWidget(this);
+        weditbg->setGeometry(0, 0, 600, 450);
+        weditbg->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
+        QWidget* wedit = new QWidget(weditbg);
+        wedit->setGeometry(25, 25, 550, 400);
+        wedit->setStyleSheet(
+            "QWidget {"
+            "background-color: #23272F;"
+            "border-radius: 20px;"
+            "}"
+            "QPushButton:hover {"
+            "   background-color: #2B303B;"
+            "}"
+        );
+        QFrame* enavbar = new QFrame(wedit);
+        enavbar->setFixedSize(550, 50);
+
+        QPushButton* eback = new QPushButton(enavbar);
+        eback->setGeometry(10, 5, 40, 40);
+        eback->setIcon(QIcon(":/images/images/back_icon.svg"));
+        eback->setIconSize(QSize(20, 20));
+        connect(eback, SIGNAL(clicked()), this, SLOT(BackContact()));
+
+        QPushButton* esave = new QPushButton(enavbar);
+        esave->setGeometry(500, 5, 40, 40);
+        esave->setIcon(QIcon(":/images/images/save_icon.svg"));
+        esave->setIconSize(QSize(20, 20));
+
+        QFrame* elayout = new QFrame(wedit);
+        elayout->setGeometry(0, 50, 550, 350);
+        elayout->setStyleSheet(
+            "QFrame {"
+            "   background-color: #23272F;"
+            "   font-family: Poppins;"
+            "   font-size: 10pt;"
+            "}"
+            "QLabel {"
+            "   color: #9FAABF;"
+            "   text-align: center;"
+            "   qproperty-alignment: AlignCenter;"
+            "}"
+            "QPushButton {"
+            "   font-family: Poppins;"
+            "   font-size: 10pt;"
+            "   background-color: #333742;"
+            "   border-radius: 12px;"
+            "}"
+            "QLineEdit {"
+            "   font-family: Poppins;"
+            "   font-size: 10pt;"
+            "   text-align: center;"
+            "   qproperty-alignment: AlignCenter;"
+            "   background-color: #333742;"
+            "   border-radius: 12px;"
+            "}"
+        );
+        QLabel* efirstnamelabel = new QLabel(elayout);
+        efirstnamelabel->setText("Firstname");
+        efirstnamelabel->setGeometry(20, 15, 150, 20);
+           
+        QLabel* elastnamelabel = new QLabel(elayout);
+        elastnamelabel->setText("Lastname");
+        elastnamelabel->setGeometry(200, 15, 150, 20);
+
+        QLabel* enicknamelabel = new QLabel(elayout);
+        enicknamelabel->setText("Nickname");
+        enicknamelabel->setGeometry(380, 15, 150, 20);
+
+        QLabel* eidlabel = new QLabel(elayout);
+        eidlabel->setText("ID");
+        eidlabel->setGeometry(30, 95, 40, 20);
+
+        QLabel* enumberlabel = new QLabel(elayout);
+        enumberlabel->setText("Phone Number");
+        enumberlabel->setGeometry(130, 95, 150, 20);
+
+        QLabel* ehomenumberlabel = new QLabel(elayout);
+        ehomenumberlabel->setText("Home Number");
+        ehomenumberlabel->setGeometry(340, 95, 150, 20);
+
+        QLabel* eemaillabel = new QLabel(elayout);
+        eemaillabel->setText("Email");
+        eemaillabel->setGeometry(225, 175, 100, 20);
+
+        QLabel* ecompanylabel = new QLabel(elayout);
+        ecompanylabel->setText("Company");
+        ecompanylabel->setGeometry(80, 255, 150, 20);
+
+        QLabel* epositionlabel = new QLabel(elayout);
+        epositionlabel->setText("Position");
+        epositionlabel->setGeometry(320, 255, 150, 20);
+
+         //data
+        QLineEdit* efirstname = new QLineEdit(elayout);
+        efirstname->setText("Imie");
+        efirstname->setGeometry(20, 36, 150, 25);
+
+        QLineEdit* elastname = new QLineEdit(elayout);
+        elastname->setText("Nazwisko");
+        elastname->setGeometry(200, 36, 150, 25);
+
+        QLineEdit* enickname = new QLineEdit(elayout);
+        enickname->setText("Pseudonim");
+        enickname->setGeometry(380, 36, 150, 25);
+
+        QPushButton* eid = new QPushButton(elayout);
+        eid->setText("id");
+        eid->setGeometry(30, 116, 40, 25);
+
+        QLineEdit* enumber = new QLineEdit(elayout);
+        enumber->setText("numer");
+        enumber->setGeometry(130, 116, 150, 25);
+
+        QLineEdit* ehomenumber = new QLineEdit(elayout);
+        ehomenumber->setText("homenumber");
+        ehomenumber->setGeometry(340, 116, 150, 25);
+
+        QLineEdit* eemail = new QLineEdit(elayout);
+        eemail->setText("email");
+        eemail->setGeometry(150, 196, 250, 25);
+
+        QLineEdit* ecompany = new QLineEdit(elayout);
+        ecompany->setText("company");
+        ecompany->setGeometry(55, 276, 200, 25);
+
+        QLineEdit* eposition = new QLineEdit(elayout);
+        eposition->setText("position");
+        eposition->setGeometry(295, 276, 200, 25);
+        
+        weditbg->show();
+    }
+
 }
 void QWMain::BackMain()
 {
     if (wcontactbg->isVisible())
     {
-        wcontactbg->hide();
+        delete wcontactbg;
+        wcontactbg = nullptr;
         navbar->show();
         wmain->show();
+    }
+}
+
+void QWMain::BackContact()
+{
+    if (weditbg->isVisible())
+    {
+        delete weditbg;
+        weditbg = nullptr;
+        wcontactbg->show();
     }
 }

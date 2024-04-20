@@ -7,5 +7,6 @@
         <file>images/star_icon.svg</file>
         <file>images/trash_icon.svg</file>
         <file>images/edit_icon.svg</file>
+        <file>images/save_icon.svg</file>
     </qresource>
 </RCC>

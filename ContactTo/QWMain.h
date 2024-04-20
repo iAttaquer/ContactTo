@@ -9,6 +9,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QFrame>
+#include <QtWidgets/QLineEdit>
 #include "ui_QWMain.h"
 
 class QWMain : public QMainWindow
@@ -25,15 +26,18 @@ public slots:
     void ShowMain();
     void ShowFavourite();
     void ShowSettings();
-    void ShowContact();
     void ShowAdd();
+    void ShowContact();
+    void ShowEdit();
     void BackMain();
+    void BackContact();
 
 private:
     Ui::QWMainClass ui;
-    QWidget* navbar;
-    QWidget* wmain;
-    QWidget* wfavourite;
-    QWidget* wsettings;
-    QWidget* wcontactbg;
+    QWidget* navbar = nullptr;
+    QWidget* wmain = nullptr;
+    QWidget* wfavourite = nullptr;
+    QWidget* wsettings = nullptr;
+    QWidget* wcontactbg = nullptr;
+    QWidget* weditbg = nullptr;
 };
