@@ -405,6 +405,7 @@ void QWMain::ShowContact()
         QPushButton* cdelete = new QPushButton(cnavbar);
         cdelete->setGeometry(500, 5, 40, 40);
         cdelete->setIcon(QIcon(":/images/images/trash_icon.svg"));
+        connect(cdelete, SIGNAL(clicked()), this, SLOT(on_pushButton_clicked()));// test
 
         QFrame* clayout = new QFrame(wcontact);
         clayout->setGeometry(0, 50, 550, 350);
@@ -663,5 +664,28 @@ void QWMain::BackContact()
         delete weditbg;
         weditbg = nullptr;
         wcontactbg->show();
+    }
+}
+//test
+void QWMain::on_pushButton_clicked()
+{
+    try {
+        pqxx::connection pgConnection("host=localhost dbname=postgres user=postgres password=postgres \
+             hostaddr=127.0.0.1 port=5432");
+        if (pgConnection.is_open()) {
+            //std::cout << "Connection success" << std::endl;
+            //label->setText("Connection success");
+            QMessageBox::warning(this, "Warning", "Coś działa");
+        }
+        else {
+            //std::cout << "Connection failed" << std::endl;
+            //label->setText("Connection failed");
+            QMessageBox::warning(this, "Warning", "Coś nie działa");
+        }
+    }
+    catch (const std::exception& ex) {
+        //std::cout << "DB failed: " << ex.what() << std::endl;
+        //label->setText("DB failed: " + QString::fromStdString(ex.what()));
+        QMessageBox::warning(this, "Warning", "Coś nie działa" + QString::fromStdString(ex.what()));
     }
 }

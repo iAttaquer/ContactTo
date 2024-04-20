@@ -11,6 +11,7 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLineEdit>
 #include "ui_QWMain.h"
+#include <pqxx/pqxx>
 
 class QWMain : public QMainWindow
 {
@@ -32,6 +33,7 @@ public slots:
     void ShowEdit();
     void BackMain();
     void BackContact();
+    void on_pushButton_clicked();//test
 
 private:
     Ui::QWMainClass ui;
