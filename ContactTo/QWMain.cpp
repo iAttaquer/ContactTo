@@ -669,23 +669,25 @@ void QWMain::BackContact()
 //test
 void QWMain::on_pushButton_clicked()
 {
-    try {
-        pqxx::connection pgConnection("host=localhost dbname=postgres user=postgres password=postgres \
-             hostaddr=127.0.0.1 port=5432");
-        if (pgConnection.is_open()) {
-            //std::cout << "Connection success" << std::endl;
-            //label->setText("Connection success");
-            QMessageBox::warning(this, "Warning", "Coś działa");
-        }
-        else {
-            //std::cout << "Connection failed" << std::endl;
-            //label->setText("Connection failed");
-            QMessageBox::warning(this, "Warning", "Coś nie działa");
-        }
-    }
-    catch (const std::exception& ex) {
-        //std::cout << "DB failed: " << ex.what() << std::endl;
-        //label->setText("DB failed: " + QString::fromStdString(ex.what()));
-        QMessageBox::warning(this, "Warning", "Coś nie działa" + QString::fromStdString(ex.what()));
-    }
+    QMessageBox::warning(this, "Warning", QString::number(pg.Count()));
+    //pg.Count();
+    //try {
+    //    pqxx::connection pgConnection("host=localhost dbname=postgres user=postgres password=postgres \
+    //         hostaddr=127.0.0.1 port=5432");
+    //    if (pgConnection.is_open()) {
+    //        //std::cout << "Connection success" << std::endl;
+    //        //label->setText("Connection success");
+    //        QMessageBox::warning(this, "Warning", "Coś działa");
+    //    }
+    //    else {
+    //        //std::cout << "Connection failed" << std::endl;
+    //        //label->setText("Connection failed");
+    //        QMessageBox::warning(this, "Warning", "Coś nie działa");
+    //    }
+    //}
+    //catch (const std::exception& ex) {
+    //    //std::cout << "DB failed: " << ex.what() << std::endl;
+    //    //label->setText("DB failed: " + QString::fromStdString(ex.what()));
+    //    QMessageBox::warning(this, "Warning", "Coś nie działa" + QString::fromStdString(ex.what()));
+    //}
 }

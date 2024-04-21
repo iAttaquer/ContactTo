@@ -11,7 +11,7 @@
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLineEdit>
 #include "ui_QWMain.h"
-#include <pqxx/pqxx>
+#include "pgDbClient.h"
 
 class QWMain : public QMainWindow
 {
@@ -37,6 +37,7 @@ public slots:
 
 private:
     Ui::QWMainClass ui;
+    pgDbClient pg;
     QWidget* navbar = nullptr;
     QWidget* wmain = nullptr;
     QWidget* wfavourite = nullptr;
