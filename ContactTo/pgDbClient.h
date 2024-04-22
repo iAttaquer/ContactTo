@@ -1,6 +1,21 @@
 #pragma once
 #include <pqxx/pqxx>
 #include <string>
+#include <vector>
+
+struct Contact {
+	int id;
+	std::string firstname;
+	std::string lastname;
+	std::string number;
+};
+struct FullContact : public Contact {
+	std::string homenumber;
+	std::string company;
+	std::string position;
+	std::string email;
+	std::string nickname;
+};
 
 class pgDbClient
 {
@@ -17,5 +32,6 @@ private:
 public:
 	pgDbClient();
 	int Count();
-	std::string con() { return connection; }
+	std::vector<Contact> loadShortInfo();
+	FullContact loadAllInfo(int id);
 };

@@ -23,6 +23,7 @@ public:
 private slots:
     void createnavbar();
     void createwadd();
+    void createlist();
 
 public slots:
     void ShowMain();
@@ -40,9 +41,11 @@ private:
     pgDbClient pg;
     QWidget* navbar = nullptr;
     QWidget* wmain = nullptr;
+    QScrollArea* wmainscroll = nullptr;
     QWidget* wfavourite = nullptr;
     QWidget* waddbg = nullptr;
     QWidget* wsettings = nullptr;
     QWidget* wcontactbg = nullptr;
     QWidget* weditbg = nullptr;
+
 };

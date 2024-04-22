@@ -68,61 +68,8 @@ QWMain::QWMain(QWidget* parent)
     ilayout->addWidget(inumber);
 
     // scrollarea
-	QScrollArea* wmainscroll = new QScrollArea(wmain);
-	wmainscroll->setGeometry(QRect(0, 20, 600, 380));
-    wmainscroll->setWidgetResizable(true);
-   
-    
-    QWidget* scontainer = new QWidget;
-    scontainer->setGeometry(QRect(0, 0, 600, 380)); 
-    scontainer->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
-    QVBoxLayout* wmainlayout = new QVBoxLayout(scontainer);
-    wmainlayout->setContentsMargins(15, 10, 15, 10);
-    wmainlayout->setSpacing(10);
-
-    for (int i = 0; i < 20; i++)
-    {
-        QPushButton* contactframe = new QPushButton();
-        contactframe->setFixedSize(550, 50);
-        contactframe->setStyleSheet("QPushButton {"
-            "   color: #23272F;"
-            "   border-radius: 25px;"
-            "   background-color: #23272F;"
-            "}"
-            "QPushButton:hover {"
-            "   color: #2D323D;"
-            "   background-color: #2B303B;"
-            "}"
-            "QLabel {"
-            "   font-family: Poppins;"
-            "   font-size: 10pt;"
-            "   background-color: #333742;"
-            "   border-radius: 8px;"
-            "   color: #B8C3D9;"
-            "   text-align: center;"
-            "   qproperty-alignment: AlignCenter;"
-            "}"
-            "QLabel:hover {"
-            "   background-color: #333742;"
-            "   color: #B8C3D9;"
-            "}"
-        );
-        connect(contactframe, SIGNAL(clicked()), this, SLOT(ShowContact()));
-        wmainlayout->addWidget(contactframe);
-        QLabel* cid = new QLabel(contactframe);
-        cid->setText(QString("%1").arg(i+1));
-        cid->setGeometry(25, 15, 40, 20);
-        QLabel* cfirstname = new QLabel(contactframe);
-        cfirstname->setText("Imie");
-        cfirstname->setGeometry(85, 15, 140, 20);
-        QLabel* clastname = new QLabel(contactframe);
-        clastname->setText("Nazwisko");
-        clastname->setGeometry(240, 15, 140, 20);
-        QLabel* cnumber = new QLabel(contactframe);
-        cnumber->setText("Numer");
-        cnumber->setGeometry(400, 15, 120, 20);
-    }
-    wmainscroll->setWidget(scontainer);
+    createlist();
+	
 
     // Favourite Widget
     wfavourite = new QWidget(this);
@@ -319,6 +266,70 @@ void QWMain::createwadd()
 
     waddbg->hide();
 }
+void QWMain::createlist()
+{
+    if (wmainscroll)
+        delete wmainscroll;
+    wmainscroll = new QScrollArea(wmain);
+    wmainscroll->setGeometry(QRect(0, 20, 600, 380));
+    wmainscroll->setWidgetResizable(true);
+
+    QWidget* scontainer = new QWidget;
+    scontainer->setGeometry(QRect(0, 0, 600, 380));
+    scontainer->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
+    QVBoxLayout* wmainlayout = new QVBoxLayout(scontainer);
+    wmainlayout->setContentsMargins(15, 10, 15, 10);
+    wmainlayout->setSpacing(10);
+    wmainlayout->setAlignment(Qt::AlignTop);
+
+    int n = pg.Count();
+    std::vector<Contact> contacts = pg.loadShortInfo();
+
+    for (int i = 0; i < n; i++)
+    {
+        QPushButton* contactframe = new QPushButton();
+        contactframe->setFixedSize(550, 50);
+        contactframe->setStyleSheet("QPushButton {"
+            "   color: #23272F;"
+            "   border-radius: 25px;"
+            "   background-color: #23272F;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #2D323D;"
+            "   background-color: #2B303B;"
+            "}"
+            "QLabel {"
+            "   font-family: Poppins;"
+            "   font-size: 10pt;"
+            "   background-color: #333742;"
+            "   border-radius: 8px;"
+            "   color: #B8C3D9;"
+            "   text-align: center;"
+            "   qproperty-alignment: AlignCenter;"
+            "}"
+            "QLabel:hover {"
+            "   background-color: #333742;"
+            "   color: #B8C3D9;"
+            "}"
+        );
+        connect(contactframe, SIGNAL(clicked()), this, SLOT(ShowContact()));
+        wmainlayout->addWidget(contactframe);
+        QLabel* cid = new QLabel(contactframe);
+        cid->setText(QString::number(contacts[i].id));
+        cid->setGeometry(25, 15, 40, 20);
+        QLabel* cfirstname = new QLabel(contactframe);
+        cfirstname->setText(QString::fromStdString(contacts[i].firstname));
+        cfirstname->setGeometry(85, 15, 140, 20);
+        QLabel* clastname = new QLabel(contactframe);
+        clastname->setText(QString::fromStdString(contacts[i].lastname));
+        clastname->setGeometry(240, 15, 140, 20);
+        QLabel* cnumber = new QLabel(contactframe);
+        cnumber->setText(QString::fromStdString(contacts[i].number));
+        cnumber->setGeometry(400, 15, 120, 20);
+    }
+    wmainscroll->setWidget(scontainer);
+    wmainscroll->show();
+}
 void QWMain::ShowMain()
 {
     if (!wmain->isVisible())
@@ -327,6 +338,7 @@ void QWMain::ShowMain()
         waddbg->hide();
         wsettings->hide();
 		wmain->show();
+        createlist();
     }
 }
 void QWMain::ShowFavourite()
@@ -361,6 +373,9 @@ void QWMain::ShowAdd()
 }
 void QWMain::ShowContact()
 {
+    FullContact contact = pg.loadAllInfo(1);
+    if (contact.firstname.empty() && contact.number.empty()) return;
+
     if (wmain->isVisible())
     {
         wmain->hide();
@@ -670,24 +685,5 @@ void QWMain::BackContact()
 void QWMain::on_pushButton_clicked()
 {
     QMessageBox::warning(this, "Warning", QString::number(pg.Count()));
-    //pg.Count();
-    //try {
-    //    pqxx::connection pgConnection("host=localhost dbname=postgres user=postgres password=postgres \
-    //         hostaddr=127.0.0.1 port=5432");
-    //    if (pgConnection.is_open()) {
-    //        //std::cout << "Connection success" << std::endl;
-    //        //label->setText("Connection success");
-    //        QMessageBox::warning(this, "Warning", "Coś działa");
-    //    }
-    //    else {
-    //        //std::cout << "Connection failed" << std::endl;
-    //        //label->setText("Connection failed");
-    //        QMessageBox::warning(this, "Warning", "Coś nie działa");
-    //    }
-    //}
-    //catch (const std::exception& ex) {
-    //    //std::cout << "DB failed: " << ex.what() << std::endl;
-    //    //label->setText("DB failed: " + QString::fromStdString(ex.what()));
-    //    QMessageBox::warning(this, "Warning", "Coś nie działa" + QString::fromStdString(ex.what()));
-    //}
+    pg.loadShortInfo();
 }
