@@ -1,5 +1,4 @@
-#pragma once
-
+#pragma once     
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
@@ -10,6 +9,8 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLineEdit>
+#include <QRegularExpressionValidator>
+#include <QRegularExpression>
 #include "ui_QWMain.h"
 #include "pgDbClient.h"
 
@@ -19,21 +20,21 @@ class QWMain : public QMainWindow
 
 public:
     QWMain(QWidget *parent = nullptr);
-    ~QWMain();
-private slots:
+    ~QWMain();   
+
+public slots:
     void createnavbar();
     void createwadd();
     void createlist();
-
-public slots:
     void ShowMain();
     void ShowFavourite();
     void ShowSettings();
     void ShowAdd();
-    void ShowContact();
-    void ShowEdit();
+    void ShowContact(int id);
+    void ShowEdit(FullContact c);
     void BackMain();
     void BackContact();
+    void AddContact(FullContact c);
     void on_pushButton_clicked();//test
 
 private:

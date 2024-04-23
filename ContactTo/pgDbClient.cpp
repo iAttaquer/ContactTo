@@ -1,6 +1,5 @@
 #include "pgDbClient.h"
 #include <iostream>
-#include <QtWidgets/QMessageBox>
 
 void pgDbClient::createstring()
 {
@@ -76,7 +75,7 @@ FullContact pgDbClient::loadAllInfo(int id)
 		if (pgConnection.is_open())
 		{
 			pqxx::work pgTran(pgConnection);
-			std::string query = "select * from \"CONTACTS\" where \"ID\" = "+ std::to_string(id);
+			std::string query = "select * from \"CONTACTS\" where \"ID\" = " + std::to_string(id);
 			pqxx::result res = pgTran.exec(query);
 			contact.id = res[0][0].as<int>();
 			if(!res[0][1].is_null())
@@ -103,4 +102,52 @@ FullContact pgDbClient::loadAllInfo(int id)
 		std::cerr << e.what() << std::endl;
 	}
 	return contact;
+}
+
+bool pgDbClient::Is(FullContact c)
+{
+	try {
+		pqxx::connection pgConnection(connection);
+		if(pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "select \"ID\" from \"CONTACTS\" where \"NUMER\" = " + c.number;
+			pqxx::result res = pgTran.exec(query);
+
+
+		}
+	}
+	return false;
+}
+
+bool pgDbClient::Add(FullContact c)
+{
+	
+	try {
+		pqxx::connection pgConnection(connection);
+		std::string query = "";
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return false;
+}
+
+FullContact::FullContact(std::string f, std::string l, std::string nu, std::string hn, std::string c, std::string p, std::string e, std::string n)
+{
+	firstname = f;
+	lastname = l;
+	number = nu;
+	homenumber = hn;
+	company = c;
+	position = p;
+	email = e;
+	nickname = n;
+}
+
+bool FullContact::operator==(FullContact f) const
+{
+	return this->firstname == f.firstname && this->lastname == f.lastname && this->number == f.number
+		&& this->homenumber == f.homenumber && this->company == f.company && this->position == f.position
+		&& this->email == f.email && this->nickname == f.nickname;
 }

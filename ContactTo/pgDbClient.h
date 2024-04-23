@@ -9,12 +9,16 @@ struct Contact {
 	std::string lastname;
 	std::string number;
 };
-struct FullContact : public Contact {
+class FullContact : public Contact {
+public:
 	std::string homenumber;
 	std::string company;
 	std::string position;
 	std::string email;
 	std::string nickname;
+	FullContact(std::string f = "", std::string l = "", std::string nu = "", std::string hn = "",
+		std::string c = "", std::string p = "", std::string e = "", std::string n = "");
+	bool operator==(FullContact f) const;
 };
 
 class pgDbClient
@@ -34,4 +38,6 @@ public:
 	int Count();
 	std::vector<Contact> loadShortInfo();
 	FullContact loadAllInfo(int id);
+	bool Is(FullContact c);
+	bool Add(FullContact c);
 };
