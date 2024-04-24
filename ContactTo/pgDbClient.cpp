@@ -24,7 +24,7 @@ int pgDbClient::Count()
 		if (pgConnection.is_open())
 		{
 			pqxx::work pgTran(pgConnection);
-			std::string query = "select count(*) from \"CONTACTS\"";
+			std::string query = "SELECT COUNT(*) FROM \"CONTACTS\"";
 			pqxx::result res = pgTran.exec(query);
 			int count = res[0][0].as<int>();
 			pgTran.commit();
@@ -46,7 +46,7 @@ std::vector<Contact> pgDbClient::loadShortInfo()
 		if (pgConnection.is_open())
 		{
 			pqxx::work pgTran(pgConnection);
-			std::string query = "select \"ID\", \"IMIE\", \"NAZWISKO\", \"TELEFON\" from \"CONTACTS\"";
+			std::string query = "SELECT \"ID\", \"IMIE\", \"NAZWISKO\", \"TELEFON\" FROM \"CONTACTS\"";
 			pqxx::result res = pgTran.exec(query);
 			
 			for (auto row : res) {
@@ -75,7 +75,7 @@ FullContact pgDbClient::loadAllInfo(int id)
 		if (pgConnection.is_open())
 		{
 			pqxx::work pgTran(pgConnection);
-			std::string query = "select * from \"CONTACTS\" where \"ID\" = " + std::to_string(id);
+			std::string query = "SELECT * FROM \"CONTACTS\" WHERE \"ID\" = " + std::to_string(id);
 			pqxx::result res = pgTran.exec(query);
 			contact.id = res[0][0].as<int>();
 			if(!res[0][1].is_null())
@@ -111,24 +111,41 @@ bool pgDbClient::Is(FullContact c)
 		if(pgConnection.is_open())
 		{
 			pqxx::work pgTran(pgConnection);
-			std::string query = "select \"ID\" from \"CONTACTS\" where \"NUMER\" = " + c.number;
+			std::string query = "SELECT \"ID\" FROM \"CONTACTS\" WHERE \"TELEFON\" = \'" + c.number + "\'";
 			pqxx::result res = pgTran.exec(query);
-
-
+			if (res.size() != 0)
+				return true;
+			pgTran.commit();
+			pgConnection.close();
 		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
 	}
 	return false;
 }
 
 bool pgDbClient::Add(FullContact c)
 {
-	
-	try {
-		pqxx::connection pgConnection(connection);
-		std::string query = "";
-	}
-	catch (const std::exception& e) {
-		std::cerr << e.what() << std::endl;
+	{
+		try {
+			pqxx::connection pgConnection(connection);
+			if(pgConnection.is_open())
+			{
+				pqxx::work pgTran(pgConnection);
+				std::string query = "INSERT INTO \"CONTACTS\" (\"IMIE\", \"NAZWISKO\", \"TELEFON\", \"TEL_DOM\", \
+					\"FIRMA\", \"STANOWISKO\", \"EMAIL\", \"PSEUDONIM\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
+				pqxx::result res = pgTran.exec_params(query, c.firstname, c.lastname, c.number, c.homenumber,
+					c.company, c.position, c.email, c.nickname);
+				pgTran.commit();
+				pgConnection.close();
+				return true;
+			}
+		}
+		catch (const std::exception& e) {
+			std::cerr << e.what() << std::endl;
+		}
+		return false;
 	}
 	return false;
 }

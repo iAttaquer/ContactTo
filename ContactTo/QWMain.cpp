@@ -273,8 +273,20 @@ void QWMain::createwadd()
     asave->setGeometry(500, 5, 40, 40);
     asave->setIcon(QIcon(":/images/images/save_icon.svg"));
     asave->setIconSize(QSize(20, 20));
-
-
+    connect(asave, &QPushButton::clicked, this, [=]() {
+        FullContact contact(
+            afirstname->text().toStdString(),
+            alastname->text().toStdString(),
+            anumber->text().toStdString(),
+            ahomenumber->text().toStdString(),
+            acompany->text().toStdString(),
+            aposition->text().toStdString(),
+            aemail->text().toStdString(),
+            anickname->text().toStdString()
+        );
+        std::cout << contact.firstname;
+        AddContact(contact);
+    });
     waddbg->hide();
 }
 void QWMain::createlist()
@@ -712,7 +724,15 @@ void QWMain::BackContact()
 }
 void QWMain::AddContact(FullContact c)
 {
-
+    if (pg.Is(c))
+    {
+        QMessageBox::warning(this, "Error!", "Contact already exist!");
+    }
+    else if (pg.Add(c))
+    {
+        QMessageBox::information(this, "Success!", "Contact Added!");
+    }
+    
 }
 //test
 void QWMain::on_pushButton_clicked()
