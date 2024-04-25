@@ -15,12 +15,12 @@ FullContact::FullContact(std::string f, std::string l, std::string nu, std::stri
 	nickname = n;
 }
 
-bool FullContact::operator==(FullContact f) const
-{
-	return this->firstname == f.firstname && this->lastname == f.lastname && this->number == f.number
-		&& this->homenumber == f.homenumber && this->company == f.company && this->position == f.position
-		&& this->email == f.email && this->nickname == f.nickname;
-}
+//bool FullContact::operator==(FullContact f) const
+//{
+//	return this->firstname == f.firstname && this->lastname == f.lastname && this->number == f.number
+//		&& this->homenumber == f.homenumber && this->company == f.company && this->position == f.position
+//		&& this->email == f.email && this->nickname == f.nickname;
+//}
 
 // pgDbClient methods
 
@@ -189,9 +189,7 @@ bool pgDbClient::Delete(int id) const
 		{
 			pqxx::work pgTran(pgConnection);
 			std::string query = "DELETE FROM \"CONTACTS\" WHERE \"ID\" = " + std::to_string(id);
-			std::cout << query << std::endl;
 			pqxx::result res = pgTran.exec(query);
-			std::cout << res[0][0] << std::endl;
 			if(res.affected_rows()>0)
 			{
 				pgTran.commit();
@@ -199,6 +197,17 @@ bool pgDbClient::Delete(int id) const
 				return true;
 			}
 		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return false;
+}
+
+bool pgDbClient::Update(FullContact c) const
+{
+	try {
+		pqxx::connection pgConnection(connection);
 	}
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;

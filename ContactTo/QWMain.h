@@ -37,6 +37,7 @@ public slots:
     void BackMain();
     void BackContact();
     void AddContact(FullContact c);
+    void DeleteContact(int id);
     void on_pushButton_clicked();//test
 
 private:

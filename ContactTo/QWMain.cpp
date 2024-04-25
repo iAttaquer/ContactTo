@@ -69,7 +69,6 @@ QWMain::QWMain(QWidget* parent)
 
     // scrollarea
     createlist();
-	
 
     // Favourite Widget
     wfavourite = new QWidget(this);
@@ -194,10 +193,6 @@ void QWMain::createwadd()
     anicknamelabel->setText("Nickname");
     anicknamelabel->setGeometry(380, 0, 150, 20);
 
-    /*QLabel* aidlabel = new QLabel(alayout);
-    aidlabel->setText("ID");
-    aidlabel->setGeometry(30, 80, 40, 20);*/
-
     QLabel* anumberlabel = new QLabel(alayout);
     anumberlabel->setText("Phone Number");
     anumberlabel->setGeometry(95, 80, 150, 20);
@@ -233,10 +228,6 @@ void QWMain::createwadd()
     anickname->setPlaceholderText("Jasiek");
     anickname->setMaxLength(20);
     anickname->setGeometry(380, 21, 150, 25);
-
-    /*QPushButton* aid = new QPushButton(alayout);
-    aid->setText("id");
-    aid->setGeometry(30, 101, 40, 25);*/
 
     QLineEdit* anumber = new QLineEdit(alayout);
     anumber->setPlaceholderText("123456789");
@@ -280,7 +271,6 @@ void QWMain::createwadd()
             aemail->text().toStdString(),
             anickname->text().toStdString()
         );
-        std::cout << contact.firstname;
         AddContact(contact);
     });
     waddbg->hide();
@@ -471,7 +461,7 @@ void QWMain::createsettings()
             shostaddr->text().toStdString(),
             sport->text().toStdString()
         );
-        QMessageBox::information(this, "Success!", "Settings Changed!");
+        QMessageBox::information(this, "Success!", "Settings changed!");
         });
     
     wsettingsbg->hide();
@@ -533,136 +523,138 @@ void QWMain::ShowContact(int id)
     if (wcontactbg)
         delete wcontactbg;
    
-        wcontactbg = new QWidget(this);
-        wcontactbg->setGeometry(0, 0, 600, 450);
-        wcontactbg->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
-        QWidget* wcontact = new QWidget(wcontactbg);
-        wcontact->setGeometry(25, 25, 550, 400);
-        wcontact->setStyleSheet(
-            "background-color: #23272F;"
-            "border-radius: 20px;"
-        );
-        QFrame* cnavbar = new QFrame(wcontact);
-        cnavbar->setFixedSize(550, 50);
-        cnavbar->setStyleSheet(
-            "QFrame {"
-            "}"
-            "QPushButton {"
+    wcontactbg = new QWidget(this);
+    wcontactbg->setGeometry(0, 0, 600, 450);
+    wcontactbg->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
+    QWidget* wcontact = new QWidget(wcontactbg);
+    wcontact->setGeometry(25, 25, 550, 400);
+    wcontact->setStyleSheet(
+        "background-color: #23272F;"
+        "border-radius: 20px;"
+    );
+    QFrame* cnavbar = new QFrame(wcontact);
+    cnavbar->setFixedSize(550, 50);
+    cnavbar->setStyleSheet(
+        "QFrame {"
         "}"
-            "QPushButton:hover {"
-            "   background-color: #2B303B;}"
-        );
-        QPushButton* cback = new QPushButton(cnavbar);
-        cback->setGeometry(10, 5, 40, 40);
-        cback->setIcon(QIcon(":/images/images/back_icon.svg"));
-        cback->setIconSize(QSize(20, 20));
-        connect(cback, SIGNAL(clicked()), this, SLOT(BackMain()));
+        "QPushButton {"
+    "}"
+        "QPushButton:hover {"
+        "   background-color: #2B303B;}"
+    );
+    QPushButton* cback = new QPushButton(cnavbar);
+    cback->setGeometry(10, 5, 40, 40);
+    cback->setIcon(QIcon(":/images/images/back_icon.svg"));
+    cback->setIconSize(QSize(20, 20));
+    connect(cback, SIGNAL(clicked()), this, SLOT(BackMain()));
 
-        QPushButton* cedit = new QPushButton(cnavbar);
-        cedit->setGeometry(450, 5, 40, 40);
-        cedit->setIcon(QIcon(":/images/images/edit_icon.svg"));
-        cedit->setIconSize(QSize(18, 18));
-        connect(cedit, &QPushButton::clicked, this, [=]() {ShowEdit(contact); });
+    QFrame* clayout = new QFrame(wcontact);
+    clayout->setGeometry(0, 50, 550, 350);
+    clayout->setStyleSheet(
+        "QFrame {"
+        "background-color: #23272F;"
+        "}"
+        "QLabel {"
+        "   color: #9FAABF;"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "   text-align: center;"
+        "   qproperty-alignment: AlignCenter;"
+        "}"
+        "QPushButton {"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "   background-color: #333742;"
+        "   border-radius: 12px;"
+        "}"
+    );
+    QLabel* cfirstnamelabel = new QLabel(clayout);
+    cfirstnamelabel->setText("Firstname");
+    cfirstnamelabel->setGeometry(20, 15, 150, 20);
 
-        QPushButton* cdelete = new QPushButton(cnavbar);
-        cdelete->setGeometry(500, 5, 40, 40);
-        cdelete->setIcon(QIcon(":/images/images/trash_icon.svg"));
-        connect(cdelete, SIGNAL(clicked()), this, SLOT(on_pushButton_clicked()));// test
+    QLabel* clastnamelabel = new QLabel(clayout);
+    clastnamelabel->setText("Lastname");
+    clastnamelabel->setGeometry(200, 15, 150, 20);
 
-        QFrame* clayout = new QFrame(wcontact);
-        clayout->setGeometry(0, 50, 550, 350);
-        clayout->setStyleSheet(
-            "QFrame {"
-            "background-color: #23272F;"
-            "}"
-            "QLabel {"
-            "   color: #9FAABF;"
-            "   font-family: Poppins;"
-            "   font-size: 10pt;"
-            "   text-align: center;"
-            "   qproperty-alignment: AlignCenter;"
-            "}"
-            "QPushButton {"
-            "   font-family: Poppins;"
-            "   font-size: 10pt;"
-            "   background-color: #333742;"
-            "   border-radius: 12px;"
-            "}"
-        );
-        QLabel* cfirstnamelabel = new QLabel(clayout);
-        cfirstnamelabel->setText("Firstname");
-        cfirstnamelabel->setGeometry(20, 15, 150, 20);
+    QLabel* cnicknamelabel = new QLabel(clayout);
+    cnicknamelabel->setText("Nickname");
+    cnicknamelabel->setGeometry(380, 15, 150, 20);
 
-        QLabel* clastnamelabel = new QLabel(clayout);
-        clastnamelabel->setText("Lastname");
-        clastnamelabel->setGeometry(200, 15, 150, 20);
+    QLabel* cidlabel = new QLabel(clayout);
+    cidlabel->setText("ID");
+    cidlabel->setGeometry(30, 95, 40, 20);
 
-        QLabel* cnicknamelabel = new QLabel(clayout);
-        cnicknamelabel->setText("Nickname");
-        cnicknamelabel->setGeometry(380, 15, 150, 20);
+    QLabel* cnumberlabel = new QLabel(clayout);
+    cnumberlabel->setText("Phone Number");
+    cnumberlabel->setGeometry(130, 95, 150, 20);
 
-        QLabel* cidlabel = new QLabel(clayout);
-        cidlabel->setText("ID");
-        cidlabel->setGeometry(30, 95, 40, 20);
+    QLabel* chomenumberlabel = new QLabel(clayout);
+    chomenumberlabel->setText("Home Number");
+    chomenumberlabel->setGeometry(340, 95, 150, 20);
 
-        QLabel* cnumberlabel = new QLabel(clayout);
-        cnumberlabel->setText("Phone Number");
-        cnumberlabel->setGeometry(130, 95, 150, 20);
+    QLabel* cemaillabel = new QLabel(clayout);
+    cemaillabel->setText("Email");
+    cemaillabel->setGeometry(225, 175, 100, 20);
 
-        QLabel* chomenumberlabel = new QLabel(clayout);
-        chomenumberlabel->setText("Home Number");
-        chomenumberlabel->setGeometry(340, 95, 150, 20);
+    QLabel* ccompanylabel = new QLabel(clayout);
+    ccompanylabel->setText("Company");
+    ccompanylabel->setGeometry(80, 255, 150, 20);
 
-        QLabel* cemaillabel = new QLabel(clayout);
-        cemaillabel->setText("Email");
-        cemaillabel->setGeometry(225, 175, 100, 20);
+    QLabel* cpositionlabel = new QLabel(clayout);
+    cpositionlabel->setText("Position");
+    cpositionlabel->setGeometry(320, 255, 150, 20);
 
-        QLabel* ccompanylabel = new QLabel(clayout);
-        ccompanylabel->setText("Company");
-        ccompanylabel->setGeometry(80, 255, 150, 20);
-
-        QLabel* cpositionlabel = new QLabel(clayout);
-        cpositionlabel->setText("Position");
-        cpositionlabel->setGeometry(320, 255, 150, 20);
-
-        // data
-        QPushButton* cfirstname = new QPushButton(clayout);
-        cfirstname->setText(QString::fromStdString(contact.firstname));
-        cfirstname->setGeometry(20, 36, 150, 25);
+    // data
+    QPushButton* cfirstname = new QPushButton(clayout);
+    cfirstname->setText(QString::fromStdString(contact.firstname));
+    cfirstname->setGeometry(20, 36, 150, 25);
         
-        QPushButton* clastname = new QPushButton(clayout);
-        clastname->setText(QString::fromStdString(contact.lastname));
-        clastname->setGeometry(200, 36, 150, 25);
+    QPushButton* clastname = new QPushButton(clayout);
+    clastname->setText(QString::fromStdString(contact.lastname));
+    clastname->setGeometry(200, 36, 150, 25);
 
-        QPushButton* cnickname = new QPushButton(clayout);
-        cnickname->setText(QString::fromStdString(contact.nickname));
-        cnickname->setGeometry(380, 36, 150, 25);
+    QPushButton* cnickname = new QPushButton(clayout);
+    cnickname->setText(QString::fromStdString(contact.nickname));
+    cnickname->setGeometry(380, 36, 150, 25);
 
-        QPushButton* cid = new QPushButton(clayout);
-        cid->setText(QString::number(contact.id));
-        cid->setGeometry(30, 116, 40, 25);
+    QPushButton* cid = new QPushButton(clayout);
+    cid->setText(QString::number(contact.id));
+    cid->setGeometry(30, 116, 40, 25);
 
-        QPushButton* cnumber = new QPushButton(clayout);
-        cnumber->setText(QString::fromStdString(contact.number));
-        cnumber->setGeometry(130, 116, 150, 25);
+    QPushButton* cnumber = new QPushButton(clayout);
+    cnumber->setText(QString::fromStdString(contact.number));
+    cnumber->setGeometry(130, 116, 150, 25);
 
-        QPushButton* chomenumber = new QPushButton(clayout);
-        chomenumber->setText(QString::fromStdString(contact.homenumber));
-        chomenumber->setGeometry(340, 116, 150, 25);
+    QPushButton* chomenumber = new QPushButton(clayout);
+    chomenumber->setText(QString::fromStdString(contact.homenumber));
+    chomenumber->setGeometry(340, 116, 150, 25);
 
-        QPushButton* cemail = new QPushButton(clayout);
-        cemail->setText(QString::fromStdString(contact.email));
-        cemail->setGeometry(150, 196, 250, 25);
+    QPushButton* cemail = new QPushButton(clayout);
+    cemail->setText(QString::fromStdString(contact.email));
+    cemail->setGeometry(150, 196, 250, 25);
 
-        QPushButton* ccompany = new QPushButton(clayout);
-        ccompany->setText(QString::fromStdString(contact.company));
-        ccompany->setGeometry(55, 276, 200, 25);
+    QPushButton* ccompany = new QPushButton(clayout);
+    ccompany->setText(QString::fromStdString(contact.company));
+    ccompany->setGeometry(55, 276, 200, 25);
 
-        QPushButton* cposition = new QPushButton(clayout);
-        cposition->setText(QString::fromStdString(contact.position));
-        cposition->setGeometry(295, 276, 200, 25);
+    QPushButton* cposition = new QPushButton(clayout);
+    cposition->setText(QString::fromStdString(contact.position));
+    cposition->setGeometry(295, 276, 200, 25);
 
-        wcontactbg->show();
+    QPushButton* cedit = new QPushButton(cnavbar);
+    cedit->setGeometry(450, 5, 40, 40);
+    cedit->setIcon(QIcon(":/images/images/edit_icon.svg"));
+    cedit->setIconSize(QSize(18, 18));
+    connect(cedit, &QPushButton::clicked, this, [=]() {ShowEdit(contact); });
+
+    QPushButton* cdelete = new QPushButton(cnavbar);
+    cdelete->setGeometry(500, 5, 40, 40);
+    cdelete->setIcon(QIcon(":/images/images/trash_icon.svg"));
+    connect(cdelete, &QPushButton::clicked, this, [=]() {
+        DeleteContact(contact.id);
+        });
+
+    wcontactbg->show();
     
 }
 void QWMain::ShowEdit(FullContact c)
@@ -831,6 +823,7 @@ void QWMain::BackMain()
         delete wcontactbg;
         wcontactbg = nullptr;
         navbar->show();
+        createlist();
         wmain->show();
     }
 }
@@ -846,7 +839,11 @@ void QWMain::BackContact()
 }
 void QWMain::AddContact(FullContact c)
 {
-    if (pg.Is(c))
+    if (c.firstname.size() == 0 && c.number.size() == 0)
+    {
+        QMessageBox::warning(this, "Error!", "Concact needs firstname and phone number!");
+    }
+    else if (pg.Is(c))
     {
         QMessageBox::warning(this, "Error!", "Contact already exist!");
     }
@@ -856,9 +853,20 @@ void QWMain::AddContact(FullContact c)
     }
     
 }
+void QWMain::DeleteContact(int id)
+{
+    if (pg.Delete(id))
+    {
+        QMessageBox::information(this, "Success!", "Contact Deleted!");
+        BackMain();
+    }
+    else {
+        QMessageBox::warning(this, "Error!", "Contact has not been deleted!");
+    }
+}
 //test
 void QWMain::on_pushButton_clicked()
 {
-    QMessageBox::warning(this, "Warning", QString::number(pg.Delete(10)));
+    QMessageBox::warning(this, "Warning", QString::number(pg.Delete(12)));
     pg.loadShortInfo();
 }

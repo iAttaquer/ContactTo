@@ -18,7 +18,7 @@ public:
 	std::string nickname;
 	FullContact(std::string f = "", std::string l = "", std::string nu = "", std::string hn = "",
 		std::string c = "", std::string p = "", std::string e = "", std::string n = "");
-	bool operator==(FullContact f) const;
+	//bool operator==(FullContact f) const;
 };
 
 class pgDbClient
@@ -42,4 +42,5 @@ public:
 	bool Is(FullContact c) const;
 	bool Add(FullContact c) const;
 	bool Delete(int id) const;
+	bool Update(FullContact c) const;
 };
