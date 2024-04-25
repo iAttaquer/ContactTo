@@ -81,11 +81,7 @@ QWMain::QWMain(QWidget* parent)
     createwadd();
 
 	// Settings Widget
-    wsettings = new QWidget(this);
-    wsettings->setGeometry(QRect(0, 50, 600, 400));
-    wsettings->setStyleSheet("background-color: rgb(255, 0, 0)");
-    wsettings->hide();
- 
+    createsettings();
 }
 QWMain::~QWMain()
 {}
@@ -354,13 +350,139 @@ void QWMain::createlist()
     wmainscroll->setWidget(scontainer);
     wmainscroll->show();
 }
+void QWMain::createsettings()
+{
+    wsettingsbg = new QWidget(this);
+    wsettingsbg->setGeometry(QRect(0, 50, 600, 400));
+    wsettingsbg->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
+    QWidget* wsettings = new QWidget(wsettingsbg);
+    wsettings->setGeometry(25, 15, 550, 360);
+    wsettings->setStyleSheet(
+        "QWidget {"
+        "background-color: #23272F;"
+        "border-radius: 20px;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: #2B303B;"
+        "}"
+    );
+    QFrame* snavbar = new QFrame(wsettings);
+    snavbar->setFixedSize(550, 50);
+
+    QFrame* slayout = new QFrame(wsettings);
+    slayout->setGeometry(0, 50, 550, 300);
+    slayout->setStyleSheet(
+        "QFrame {"
+        "   background-color: #23272F;"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "}"
+        "QLabel {"
+        "   color: #9FAABF;"
+        "   text-align: center;"
+        "   qproperty-alignment: 'AlignVCenter | AlignRight';"
+        "}"
+        "QPushButton {"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "   background-color: #333742;"
+        "   border-radius: 12px;"
+        "}"
+        "QLineEdit {"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "   text-align: center;"
+        "   qproperty-alignment: AlignCenter;"
+        "   background-color: #333742;"
+        "   border-radius: 12px;"
+        "}"
+    );
+    QLabel* shostlabel = new QLabel(slayout);
+    shostlabel->setText("Host: ");
+    shostlabel->setGeometry(60, 10, 150, 25);
+    
+    QLabel* sdbnamelabel = new QLabel(slayout);
+    sdbnamelabel->setText("Database name: ");
+    sdbnamelabel->setGeometry(60, 60, 150, 25);
+
+    QLabel* suserlabel = new QLabel(slayout);
+    suserlabel->setText("User: ");
+    suserlabel->setGeometry(60, 110, 150, 25);
+
+    QLabel* spasswordlabel = new QLabel(slayout);
+    spasswordlabel->setText("Password: ");
+    spasswordlabel->setGeometry(60, 160, 150, 25);
+
+    QLabel* shostaddrlabel = new QLabel(slayout);
+    shostaddrlabel->setText("Host address: ");
+    shostaddrlabel->setGeometry(60, 210, 150, 25);
+
+    QLabel* sportlabel = new QLabel(slayout);
+    sportlabel->setText("Port: ");
+    sportlabel->setGeometry(60, 260, 150, 25);
+
+    // data
+    QLineEdit* shost = new QLineEdit(slayout);
+    shost->setPlaceholderText("localhost");
+    shost->setText("localhost");
+    shost->setMaxLength(30);
+    shost->setGeometry(210, 10, 200, 25);
+
+    QLineEdit* sdbname = new QLineEdit(slayout);
+    sdbname->setPlaceholderText("postgres");
+    sdbname->setText("postgres");
+    sdbname->setMaxLength(30);
+    sdbname->setGeometry(210, 60, 200, 25);
+
+    QLineEdit* suser = new QLineEdit(slayout);
+    suser->setPlaceholderText("postgres");
+    suser->setText("postgres");
+    suser->setMaxLength(30);
+    suser->setGeometry(210, 110, 200, 25);
+
+    QLineEdit* spassword = new QLineEdit(slayout);
+    spassword->setPlaceholderText("postgres");
+    spassword->setText("postgres");
+    spassword->setMaxLength(30);
+    spassword->setGeometry(210, 160, 200, 25);
+
+    QLineEdit* shostaddr = new QLineEdit(slayout);
+    shostaddr->setPlaceholderText("127.0.0.1");
+    shostaddr->setText("127.0.0.1");
+    shostaddr->setMaxLength(30);
+    shostaddr->setGeometry(210, 210, 200, 25);
+
+    QLineEdit* sport = new QLineEdit(slayout);
+    sport->setPlaceholderText("5432");
+    sport->setText("5432");
+    sport->setMaxLength(30);
+    sport->setGeometry(210, 260, 200, 25);
+
+    QPushButton* ssave = new QPushButton(snavbar);
+    ssave->setGeometry(500, 5, 40, 40);
+    ssave->setIcon(QIcon(":/images/images/save_icon.svg"));
+    ssave->setIconSize(QSize(20, 20));
+    connect(ssave, &QPushButton::clicked, this, [=]() {
+        pg.setSettings(
+            shost->text().toStdString(),
+            sdbname->text().toStdString(),
+            suser->text().toStdString(),
+            spassword->text().toStdString(),
+            shostaddr->text().toStdString(),
+            sport->text().toStdString()
+        );
+        QMessageBox::information(this, "Success!", "Settings Changed!");
+        });
+    
+    wsettingsbg->hide();
+}
 void QWMain::ShowMain()
 {
     if (!wmain->isVisible())
     {
 		wfavourite->hide();
         waddbg->hide();
-        wsettings->hide();
+        wsettingsbg->hide();
 		wmain->show();
         createlist();
     }
@@ -371,18 +493,18 @@ void QWMain::ShowFavourite()
     {
 		wmain->hide();
         waddbg->hide();
-		wsettings->hide();
+		wsettingsbg->hide();
 		wfavourite->show();
     }
 }
 void QWMain::ShowSettings()
 {
-    if (!wsettings->isVisible())
+    if (!wsettingsbg->isVisible())
     {
         wmain->hide();
 		wfavourite->hide();
         waddbg->hide();
-		wsettings->show();
+		wsettingsbg->show();
     }
 }
 void QWMain::ShowAdd()
@@ -391,7 +513,7 @@ void QWMain::ShowAdd()
     {
         wmain->hide();
         wfavourite->hide();
-        wsettings->hide();
+        wsettingsbg->hide();
         waddbg->show();
     }
 }
@@ -737,6 +859,6 @@ void QWMain::AddContact(FullContact c)
 //test
 void QWMain::on_pushButton_clicked()
 {
-    QMessageBox::warning(this, "Warning", QString::number(pg.Count()));
+    QMessageBox::warning(this, "Warning", QString::number(pg.Delete(10)));
     pg.loadShortInfo();
 }

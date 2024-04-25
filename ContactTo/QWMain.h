@@ -7,6 +7,7 @@
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLineEdit>
 #include <QRegularExpressionValidator>
@@ -26,6 +27,7 @@ public slots:
     void createnavbar();
     void createwadd();
     void createlist();
+    void createsettings();
     void ShowMain();
     void ShowFavourite();
     void ShowSettings();
@@ -45,7 +47,7 @@ private:
     QScrollArea* wmainscroll = nullptr;
     QWidget* wfavourite = nullptr;
     QWidget* waddbg = nullptr;
-    QWidget* wsettings = nullptr;
+    QWidget* wsettingsbg = nullptr;
     QWidget* wcontactbg = nullptr;
     QWidget* weditbg = nullptr;
 

@@ -1,6 +1,29 @@
 #include "pgDbClient.h"
 #include <iostream>
 
+// FullContact methods
+
+FullContact::FullContact(std::string f, std::string l, std::string nu, std::string hn, std::string c, std::string p, std::string e, std::string n)
+{
+	firstname = f;
+	lastname = l;
+	number = nu;
+	homenumber = hn;
+	company = c;
+	position = p;
+	email = e;
+	nickname = n;
+}
+
+bool FullContact::operator==(FullContact f) const
+{
+	return this->firstname == f.firstname && this->lastname == f.lastname && this->number == f.number
+		&& this->homenumber == f.homenumber && this->company == f.company && this->position == f.position
+		&& this->email == f.email && this->nickname == f.nickname;
+}
+
+// pgDbClient methods
+
 void pgDbClient::createstring()
 {
 	connection = "host=" + host + " dbname=" + dbname + " user=" + user + " password=" + password + " hostaddr=" + hostaddr + " port=" + port;
@@ -17,7 +40,18 @@ pgDbClient::pgDbClient()
 	createstring();
 }
 
-int pgDbClient::Count()
+void pgDbClient::setSettings(std::string h, std::string d, std::string u, std::string pw, std::string ha, std::string p)
+{
+	host = h;
+	dbname = d;
+	user = u;
+	password = pw;
+	hostaddr = ha;
+	port = p;
+	createstring();
+}
+
+int pgDbClient::Count() const
 {
 	try{
 		pqxx::connection pgConnection(connection);
@@ -38,7 +72,7 @@ int pgDbClient::Count()
 	return 0;
 }
 
-std::vector<Contact> pgDbClient::loadShortInfo()
+std::vector<Contact> pgDbClient::loadShortInfo() const
 {
 	std::vector<Contact> contacts;
 	try {
@@ -67,7 +101,7 @@ std::vector<Contact> pgDbClient::loadShortInfo()
 	return contacts;
 }
 
-FullContact pgDbClient::loadAllInfo(int id)
+FullContact pgDbClient::loadAllInfo(int id) const
 {
 	FullContact contact;
 	try {
@@ -104,7 +138,7 @@ FullContact pgDbClient::loadAllInfo(int id)
 	return contact;
 }
 
-bool pgDbClient::Is(FullContact c)
+bool pgDbClient::Is(FullContact c) const
 {
 	try {
 		pqxx::connection pgConnection(connection);
@@ -125,46 +159,49 @@ bool pgDbClient::Is(FullContact c)
 	return false;
 }
 
-bool pgDbClient::Add(FullContact c)
+bool pgDbClient::Add(FullContact c) const
 {
-	{
-		try {
-			pqxx::connection pgConnection(connection);
-			if(pgConnection.is_open())
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "INSERT INTO \"CONTACTS\" (\"IMIE\", \"NAZWISKO\", \"TELEFON\", \"TEL_DOM\", \
+				\"FIRMA\", \"STANOWISKO\", \"EMAIL\", \"PSEUDONIM\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
+			pqxx::result res = pgTran.exec_params(query, c.firstname, c.lastname, c.number, c.homenumber,
+				c.company, c.position, c.email, c.nickname);
+			pgTran.commit();
+			pgConnection.close();
+			return true;
+		}
+		}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return false;
+}
+
+bool pgDbClient::Delete(int id) const
+{
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "DELETE FROM \"CONTACTS\" WHERE \"ID\" = " + std::to_string(id);
+			std::cout << query << std::endl;
+			pqxx::result res = pgTran.exec(query);
+			std::cout << res[0][0] << std::endl;
+			if(res.affected_rows()>0)
 			{
-				pqxx::work pgTran(pgConnection);
-				std::string query = "INSERT INTO \"CONTACTS\" (\"IMIE\", \"NAZWISKO\", \"TELEFON\", \"TEL_DOM\", \
-					\"FIRMA\", \"STANOWISKO\", \"EMAIL\", \"PSEUDONIM\") VALUES ($1, $2, $3, $4, $5, $6, $7, $8);";
-				pqxx::result res = pgTran.exec_params(query, c.firstname, c.lastname, c.number, c.homenumber,
-					c.company, c.position, c.email, c.nickname);
 				pgTran.commit();
 				pgConnection.close();
 				return true;
 			}
 		}
-		catch (const std::exception& e) {
-			std::cerr << e.what() << std::endl;
-		}
-		return false;
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
 	}
 	return false;
-}
-
-FullContact::FullContact(std::string f, std::string l, std::string nu, std::string hn, std::string c, std::string p, std::string e, std::string n)
-{
-	firstname = f;
-	lastname = l;
-	number = nu;
-	homenumber = hn;
-	company = c;
-	position = p;
-	email = e;
-	nickname = n;
-}
-
-bool FullContact::operator==(FullContact f) const
-{
-	return this->firstname == f.firstname && this->lastname == f.lastname && this->number == f.number
-		&& this->homenumber == f.homenumber && this->company == f.company && this->position == f.position
-		&& this->email == f.email && this->nickname == f.nickname;
 }

@@ -35,9 +35,11 @@ private:
 
 public:
 	pgDbClient();
-	int Count();
-	std::vector<Contact> loadShortInfo();
-	FullContact loadAllInfo(int id);
-	bool Is(FullContact c);
-	bool Add(FullContact c);
+	void setSettings(std::string h, std::string d, std::string u, std::string pw, std::string ha, std::string p);
+	int Count() const;
+	std::vector<Contact> loadShortInfo() const;
+	FullContact loadAllInfo(int id) const;
+	bool Is(FullContact c) const;
+	bool Add(FullContact c) const;
+	bool Delete(int id) const;
 };
