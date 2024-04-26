@@ -5,9 +5,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QScrollArea>
-#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QLineEdit>
 #include <QRegularExpressionValidator>
@@ -38,6 +36,7 @@ public slots:
     void BackContact();
     void AddContact(FullContact c);
     void DeleteContact(int id);
+    void EditContact(FullContact c);
     void on_pushButton_clicked();//test
 
 private:

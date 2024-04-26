@@ -76,6 +76,8 @@ QWMain::QWMain(QWidget* parent)
     wfavourite->setStyleSheet("background-color: rgb(0, 0, 255)");
     wfavourite->hide();
 
+
+
     // Add Widget
     createwadd();
 
@@ -663,159 +665,171 @@ void QWMain::ShowEdit(FullContact c)
     {
         wcontactbg->hide();
     }
-    if (!weditbg)
-    {
-        weditbg = new QWidget(this);
-        weditbg->setGeometry(0, 0, 600, 450);
-        weditbg->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
-        QWidget* wedit = new QWidget(weditbg);
-        wedit->setGeometry(25, 25, 550, 400);
-        wedit->setStyleSheet(
-            "QWidget {"
-            "background-color: #23272F;"
-            "border-radius: 20px;"
-            "}"
-            "QPushButton:hover {"
-            "   background-color: #2B303B;"
-            "}"
-        );
-        QFrame* enavbar = new QFrame(wedit);
-        enavbar->setFixedSize(550, 50);
+    if (weditbg)
+        delete weditbg;
+    
+    weditbg = new QWidget(this);
+    weditbg->setGeometry(0, 0, 600, 450);
+    weditbg->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
+    QWidget* wedit = new QWidget(weditbg);
+    wedit->setGeometry(25, 25, 550, 400);
+    wedit->setStyleSheet(
+        "QWidget {"
+        "background-color: #23272F;"
+        "border-radius: 20px;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: #2B303B;"
+        "}"
+    );
+    QFrame* enavbar = new QFrame(wedit);
+    enavbar->setFixedSize(550, 50);
 
-        QPushButton* eback = new QPushButton(enavbar);
-        eback->setGeometry(10, 5, 40, 40);
-        eback->setIcon(QIcon(":/images/images/back_icon.svg"));
-        eback->setIconSize(QSize(20, 20));
-        connect(eback, SIGNAL(clicked()), this, SLOT(BackContact()));
+    QPushButton* eback = new QPushButton(enavbar);
+    eback->setGeometry(10, 5, 40, 40);
+    eback->setIcon(QIcon(":/images/images/back_icon.svg"));
+    eback->setIconSize(QSize(20, 20));
+    connect(eback, SIGNAL(clicked()), this, SLOT(BackContact()));
 
-        QPushButton* esave = new QPushButton(enavbar);
-        esave->setGeometry(500, 5, 40, 40);
-        esave->setIcon(QIcon(":/images/images/save_icon.svg"));
-        esave->setIconSize(QSize(20, 20));
-
-        QFrame* elayout = new QFrame(wedit);
-        elayout->setGeometry(0, 50, 550, 350);
-        elayout->setStyleSheet(
-            "QFrame {"
-            "   background-color: #23272F;"
-            "   font-family: Poppins;"
-            "   font-size: 10pt;"
-            "}"
-            "QLabel {"
-            "   color: #9FAABF;"
-            "   text-align: center;"
-            "   qproperty-alignment: AlignCenter;"
-            "}"
-            "QPushButton {"
-            "   font-family: Poppins;"
-            "   font-size: 10pt;"
-            "   background-color: #333742;"
-            "   border-radius: 12px;"
-            "}"
-            "QLineEdit {"
-            "   font-family: Poppins;"
-            "   font-size: 10pt;"
-            "   text-align: center;"
-            "   qproperty-alignment: AlignCenter;"
-            "   background-color: #333742;"
-            "   border-radius: 12px;"
-            "}"
-        );
-        QLabel* efirstnamelabel = new QLabel(elayout);
-        efirstnamelabel->setText("Firstname");
-        efirstnamelabel->setGeometry(20, 15, 150, 20);
+    QFrame* elayout = new QFrame(wedit);
+    elayout->setGeometry(0, 50, 550, 350);
+    elayout->setStyleSheet(
+        "QFrame {"
+        "   background-color: #23272F;"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "}"
+        "QLabel {"
+        "   color: #9FAABF;"
+        "   text-align: center;"
+        "   qproperty-alignment: AlignCenter;"
+        "}"
+        "QPushButton {"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "   background-color: #333742;"
+        "   border-radius: 12px;"
+        "}"
+        "QLineEdit {"
+        "   font-family: Poppins;"
+        "   font-size: 10pt;"
+        "   text-align: center;"
+        "   qproperty-alignment: AlignCenter;"
+        "   background-color: #333742;"
+        "   border-radius: 12px;"
+        "}"
+    );
+    QLabel* efirstnamelabel = new QLabel(elayout);
+    efirstnamelabel->setText("Firstname");
+    efirstnamelabel->setGeometry(20, 15, 150, 20);
            
-        QLabel* elastnamelabel = new QLabel(elayout);
-        elastnamelabel->setText("Lastname");
-        elastnamelabel->setGeometry(200, 15, 150, 20);
+    QLabel* elastnamelabel = new QLabel(elayout);
+    elastnamelabel->setText("Lastname");
+    elastnamelabel->setGeometry(200, 15, 150, 20);
 
-        QLabel* enicknamelabel = new QLabel(elayout);
-        enicknamelabel->setText("Nickname");
-        enicknamelabel->setGeometry(380, 15, 150, 20);
+    QLabel* enicknamelabel = new QLabel(elayout);
+    enicknamelabel->setText("Nickname");
+    enicknamelabel->setGeometry(380, 15, 150, 20);
 
-        QLabel* eidlabel = new QLabel(elayout);
-        eidlabel->setText("ID");
-        eidlabel->setGeometry(30, 95, 40, 20);
+    QLabel* eidlabel = new QLabel(elayout);
+    eidlabel->setText("ID");
+    eidlabel->setGeometry(30, 95, 40, 20);
 
-        QLabel* enumberlabel = new QLabel(elayout);
-        enumberlabel->setText("Phone Number");
-        enumberlabel->setGeometry(130, 95, 150, 20);
+    QLabel* enumberlabel = new QLabel(elayout);
+    enumberlabel->setText("Phone Number");
+    enumberlabel->setGeometry(130, 95, 150, 20);
 
-        QLabel* ehomenumberlabel = new QLabel(elayout);
-        ehomenumberlabel->setText("Home Number");
-        ehomenumberlabel->setGeometry(340, 95, 150, 20);
+    QLabel* ehomenumberlabel = new QLabel(elayout);
+    ehomenumberlabel->setText("Home Number");
+    ehomenumberlabel->setGeometry(340, 95, 150, 20);
 
-        QLabel* eemaillabel = new QLabel(elayout);
-        eemaillabel->setText("Email");
-        eemaillabel->setGeometry(225, 175, 100, 20);
+    QLabel* eemaillabel = new QLabel(elayout);
+    eemaillabel->setText("Email");
+    eemaillabel->setGeometry(225, 175, 100, 20);
 
-        QLabel* ecompanylabel = new QLabel(elayout);
-        ecompanylabel->setText("Company");
-        ecompanylabel->setGeometry(80, 255, 150, 20);
+    QLabel* ecompanylabel = new QLabel(elayout);
+    ecompanylabel->setText("Company");
+    ecompanylabel->setGeometry(80, 255, 150, 20);
 
-        QLabel* epositionlabel = new QLabel(elayout);
-        epositionlabel->setText("Position");
-        epositionlabel->setGeometry(320, 255, 150, 20);
+    QLabel* epositionlabel = new QLabel(elayout);
+    epositionlabel->setText("Position");
+    epositionlabel->setGeometry(320, 255, 150, 20);
 
-         //data
-        QLineEdit* efirstname = new QLineEdit(elayout);
-        efirstname->setText(QString::fromStdString(c.firstname));
-        efirstname->setPlaceholderText("Jan");
-        efirstname->setMaxLength(20);
-        efirstname->setGeometry(20, 36, 150, 25);
+        //data
+    QLineEdit* efirstname = new QLineEdit(elayout);
+    efirstname->setText(QString::fromStdString(c.firstname));
+    efirstname->setPlaceholderText("Jan");
+    efirstname->setMaxLength(20);
+    efirstname->setGeometry(20, 36, 150, 25);
 
-        QLineEdit* elastname = new QLineEdit(elayout);
-        elastname->setText(QString::fromStdString(c.lastname));
-        elastname->setPlaceholderText("Kowalski");
-        elastname->setMaxLength(30);
-        elastname->setGeometry(200, 36, 150, 25);
+    QLineEdit* elastname = new QLineEdit(elayout);
+    elastname->setText(QString::fromStdString(c.lastname));
+    elastname->setPlaceholderText("Kowalski");
+    elastname->setMaxLength(30);
+    elastname->setGeometry(200, 36, 150, 25);
 
-        QLineEdit* enickname = new QLineEdit(elayout);
-        enickname->setText(QString::fromStdString(c.nickname));
-        enickname->setPlaceholderText("Jasiek");
-        enickname->setMaxLength(20);
-        enickname->setGeometry(380, 36, 150, 25);
+    QLineEdit* enickname = new QLineEdit(elayout);
+    enickname->setText(QString::fromStdString(c.nickname));
+    enickname->setPlaceholderText("Jasiek");
+    enickname->setMaxLength(20);
+    enickname->setGeometry(380, 36, 150, 25);
 
-        QPushButton* eid = new QPushButton(elayout);
-        eid->setText(QString::number(c.id));
-        eid->setGeometry(30, 116, 40, 25);
+    QPushButton* eid = new QPushButton(elayout);
+    eid->setText(QString::number(c.id));
+    eid->setGeometry(30, 116, 40, 25);
 
-        QLineEdit* enumber = new QLineEdit(elayout);
-        enumber->setText(QString::fromStdString(c.number));
-        enumber->setPlaceholderText("123456789");
-        enumber->setMaxLength(15);
-        enumber->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*")));
-        enumber->setGeometry(130, 116, 150, 25);
+    QLineEdit* enumber = new QLineEdit(elayout);
+    enumber->setText(QString::fromStdString(c.number));
+    enumber->setPlaceholderText("123456789");
+    enumber->setMaxLength(15);
+    enumber->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*")));
+    enumber->setGeometry(130, 116, 150, 25);
 
-        QLineEdit* ehomenumber = new QLineEdit(elayout);
-        ehomenumber->setText(QString::fromStdString(c.homenumber));
-        ehomenumber->setPlaceholderText("987654321");
-        ehomenumber->setMaxLength(15);
-        ehomenumber->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*")));
-        ehomenumber->setGeometry(340, 116, 150, 25);
+    QLineEdit* ehomenumber = new QLineEdit(elayout);
+    ehomenumber->setText(QString::fromStdString(c.homenumber));
+    ehomenumber->setPlaceholderText("987654321");
+    ehomenumber->setMaxLength(15);
+    ehomenumber->setValidator(new QRegularExpressionValidator(QRegularExpression("[0-9]*")));
+    ehomenumber->setGeometry(340, 116, 150, 25);
 
-        QLineEdit* eemail = new QLineEdit(elayout);
-        eemail->setText(QString::fromStdString(c.email));
-        eemail->setPlaceholderText("example@mail.com");
-        eemail->setMaxLength(30);
-        eemail->setGeometry(150, 196, 250, 25);
+    QLineEdit* eemail = new QLineEdit(elayout);
+    eemail->setText(QString::fromStdString(c.email));
+    eemail->setPlaceholderText("example@mail.com");
+    eemail->setMaxLength(30);
+    eemail->setGeometry(150, 196, 250, 25);
 
-        QLineEdit* ecompany = new QLineEdit(elayout);
-        ecompany->setText(QString::fromStdString(c.company));
-        ecompany->setPlaceholderText("company name");
-        ecompany->setMaxLength(30);
-        ecompany->setGeometry(55, 276, 200, 25);
+    QLineEdit* ecompany = new QLineEdit(elayout);
+    ecompany->setText(QString::fromStdString(c.company));
+    ecompany->setPlaceholderText("company name");
+    ecompany->setMaxLength(30);
+    ecompany->setGeometry(55, 276, 200, 25);
 
-        QLineEdit* eposition = new QLineEdit(elayout);
-        eposition->setText(QString::fromStdString(c.position));
-        eposition->setPlaceholderText("position");
-        eposition->setMaxLength(20);
-        eposition->setGeometry(295, 276, 200, 25);
-        
-        weditbg->show();
-    }
+    QLineEdit* eposition = new QLineEdit(elayout);
+    eposition->setText(QString::fromStdString(c.position));
+    eposition->setPlaceholderText("position");
+    eposition->setMaxLength(20);
+    eposition->setGeometry(295, 276, 200, 25);
 
+    QPushButton* esave = new QPushButton(enavbar);
+    esave->setGeometry(500, 5, 40, 40);
+    esave->setIcon(QIcon(":/images/images/save_icon.svg"));
+    esave->setIconSize(QSize(20, 20));
+    connect(esave, &QPushButton::clicked, this, [=]() {
+        EditContact(FullContact(
+            c.id,
+            efirstname->text().toStdString(),
+            elastname->text().toStdString(),
+            enumber->text().toStdString(),
+            ehomenumber->text().toStdString(),
+            ecompany->text().toStdString(),
+            eposition->text().toStdString(),
+            eemail->text().toStdString(),
+            enickname->text().toStdString()
+        ));
+        });
+    weditbg->show();
 }
+
 void QWMain::BackMain()
 {
     if (wcontactbg->isVisible())
@@ -839,7 +853,7 @@ void QWMain::BackContact()
 }
 void QWMain::AddContact(FullContact c)
 {
-    if (c.firstname.size() == 0 && c.number.size() == 0)
+    if (c.firstname.size() == 0 || c.number.size() == 0)
     {
         QMessageBox::warning(this, "Error!", "Concact needs firstname and phone number!");
     }
@@ -862,6 +876,21 @@ void QWMain::DeleteContact(int id)
     }
     else {
         QMessageBox::warning(this, "Error!", "Contact has not been deleted!");
+    }
+}
+void QWMain::EditContact(FullContact c)
+{
+    if (c.firstname.size() == 0 || c.number.size() == 0)
+    {
+        QMessageBox::warning(this, "Error!", "firstname and phone number can't be empty!");
+    }
+    else if (pg.Update(c))
+    {
+        QMessageBox::information(this, "Success!", "Contact changed!");
+        delete weditbg;
+        weditbg = nullptr; 
+        ShowContact(c.id);
+
     }
 }
 //test

@@ -18,7 +18,8 @@ public:
 	std::string nickname;
 	FullContact(std::string f = "", std::string l = "", std::string nu = "", std::string hn = "",
 		std::string c = "", std::string p = "", std::string e = "", std::string n = "");
-	//bool operator==(FullContact f) const;
+	FullContact(int i, std::string f = "", std::string l = "", std::string nu = "", std::string hn = "",
+		std::string c = "", std::string p = "", std::string e = "", std::string n = "");
 };
 
 class pgDbClient

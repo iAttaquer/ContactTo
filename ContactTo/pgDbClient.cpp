@@ -15,12 +15,18 @@ FullContact::FullContact(std::string f, std::string l, std::string nu, std::stri
 	nickname = n;
 }
 
-//bool FullContact::operator==(FullContact f) const
-//{
-//	return this->firstname == f.firstname && this->lastname == f.lastname && this->number == f.number
-//		&& this->homenumber == f.homenumber && this->company == f.company && this->position == f.position
-//		&& this->email == f.email && this->nickname == f.nickname;
-//}
+FullContact::FullContact(int i, std::string f, std::string l, std::string nu, std::string hn, std::string c, std::string p, std::string e, std::string n)
+{
+	id = i;
+	firstname = f;
+	lastname = l;
+	number = nu;
+	homenumber = hn;
+	company = c;
+	position = p;
+	email = e;
+	nickname = n;
+}
 
 // pgDbClient methods
 
@@ -190,12 +196,10 @@ bool pgDbClient::Delete(int id) const
 			pqxx::work pgTran(pgConnection);
 			std::string query = "DELETE FROM \"CONTACTS\" WHERE \"ID\" = " + std::to_string(id);
 			pqxx::result res = pgTran.exec(query);
-			if(res.affected_rows()>0)
-			{
-				pgTran.commit();
-				pgConnection.close();
+			pgTran.commit();
+			pgConnection.close();
+			if (res.affected_rows() > 0)
 				return true;
-			}
 		}
 	}
 	catch (const std::exception& e) {
@@ -208,6 +212,18 @@ bool pgDbClient::Update(FullContact c) const
 {
 	try {
 		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "UPDATE \"CONTACTS\" SET \"IMIE\"=$1, \"NAZWISKO\"=$2, \"TELEFON\"=$3, \"TEL_DOM\"=$4,\
+				\"FIRMA\"=$5, \"STANOWISKO\"=$6, \"EMAIL\"=$7, \"PSEUDONIM\"=$8 WHERE \"ID\"=$9";
+			pqxx::result res = pgTran.exec_params(query, c.firstname, c.lastname, c.number, c.homenumber, c.company,
+				c.position, c.email, c.nickname, c.id);
+			pgTran.commit();
+			pgConnection.close();
+			if (res.affected_rows() > 0)
+				return true;
+		}
 	}
 	catch (const std::exception& e) {
 		std::cerr << e.what() << std::endl;
