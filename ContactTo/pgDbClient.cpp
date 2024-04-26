@@ -153,10 +153,10 @@ bool pgDbClient::Is(FullContact c) const
 			pqxx::work pgTran(pgConnection);
 			std::string query = "SELECT \"ID\" FROM \"CONTACTS\" WHERE \"TELEFON\" = \'" + c.number + "\'";
 			pqxx::result res = pgTran.exec(query);
-			if (res.size() != 0)
-				return true;
 			pgTran.commit();
 			pgConnection.close();
+			if (res.size() != 0)
+				return true;
 		}
 	}
 	catch (const std::exception& e) {
@@ -219,6 +219,116 @@ bool pgDbClient::Update(FullContact c) const
 				\"FIRMA\"=$5, \"STANOWISKO\"=$6, \"EMAIL\"=$7, \"PSEUDONIM\"=$8 WHERE \"ID\"=$9";
 			pqxx::result res = pgTran.exec_params(query, c.firstname, c.lastname, c.number, c.homenumber, c.company,
 				c.position, c.email, c.nickname, c.id);
+			pgTran.commit();
+			pgConnection.close();
+			if (res.affected_rows() > 0)
+				return true;
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return false;
+}
+
+int pgDbClient::CountFavourite() const
+{
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "SELECT COUNT(*) FROM \"ULUBIONE\"";
+			pqxx::result res = pgTran.exec(query);
+			pgTran.commit();
+			pgConnection.close();
+			return res[0][0].as<int>();
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return 0;
+}
+
+std::vector<Contact> pgDbClient::loadShortInfoFavourite() const
+{
+	std::vector<Contact> contacts;
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "SELECT * FROM \"CONTACTS\" INNER JOIN \"ULUBIONE\" ON \"CONTACTS\".\"ID\" = \"ULUBIONE\".\"ID\"";
+			pqxx::result res = pgTran.exec(query);
+			for (auto row : res) {
+				Contact c;
+				c.id = row[0].as<int>();
+				c.firstname = row[1].as<std::string>();
+				c.lastname = row[2].as<std::string>();
+				c.number = row[3].as<std::string>();
+				contacts.push_back(c);
+			}
+			pgTran.commit();
+			pgConnection.close();
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return contacts;
+}
+
+bool pgDbClient::IsFavourite(int id) const
+{
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "SELECT \"ID\" FROM \"ULUBIONE\" WHERE \"ID\"=" + std::to_string(id);
+			pqxx::result res = pgTran.exec(query);
+			pgTran.commit();
+			pgConnection.close();
+			if (res.size() != 0)
+				return true;
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return false;
+}
+
+bool pgDbClient::AddFavourite(int id) const
+{
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "INSERT INTO \"ULUBIONE\" (\"ID\") VALUES ($1)";
+			pqxx::result res = pgTran.exec_params(query, id);
+			pgTran.commit();
+			pgConnection.close();
+			return true;
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return false;
+}
+
+bool pgDbClient::DeleteFavourite(int id) const
+{
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+		{
+			pqxx::work pgTran(pgConnection);
+			std::string query = "DELETE FROM \"ULUBIONE\" WHERE \"ID\" = $1";
+			pqxx::result res = pgTran.exec_params(query, id);
 			pgTran.commit();
 			pgConnection.close();
 			if (res.affected_rows() > 0)

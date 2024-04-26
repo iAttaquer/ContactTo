@@ -44,4 +44,9 @@ public:
 	bool Add(FullContact c) const;
 	bool Delete(int id) const;
 	bool Update(FullContact c) const;
+	int CountFavourite() const;
+	std::vector<Contact> loadShortInfoFavourite() const;
+	bool IsFavourite(int id) const;
+	bool AddFavourite(int id) const;
+	bool DeleteFavourite(int id) const;
 };

@@ -71,12 +71,7 @@ QWMain::QWMain(QWidget* parent)
     createlist();
 
     // Favourite Widget
-    wfavourite = new QWidget(this);
-    wfavourite->setGeometry(QRect(0, 50, 600, 400));
-    wfavourite->setStyleSheet("background-color: rgb(0, 0, 255)");
-    wfavourite->hide();
-
-
+    createfavourite();
 
     // Add Widget
     createwadd();
@@ -342,6 +337,131 @@ void QWMain::createlist()
     wmainscroll->setWidget(scontainer);
     wmainscroll->show();
 }
+void QWMain::createfavourite()
+{
+    wfavourite = new QWidget(this);
+    wfavourite->setGeometry(QRect(0, 50, 600, 400));
+    wfavourite->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);"    );
+
+    // infobar widget
+    QWidget* infobar = new QWidget(wfavourite);
+    infobar->setGeometry(0, 0, 600, 20);
+    infobar->setStyleSheet("QWidget {"
+        "   background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);"
+        "}"
+        "QLabel {"
+        "   color: #9FAABF;}"
+    );
+    QHBoxLayout* ilayout = new QHBoxLayout(infobar);
+    ilayout->setContentsMargins(2, 2, 2, 2);
+
+    QLabel* iid = new QLabel("ID");
+    iid->setFont(QFont("poppins", 10));
+    iid->setMaximumWidth(90);
+    iid->setContentsMargins(30, 0, 0, 0);
+    iid->setAlignment(Qt::AlignHCenter);
+    ilayout->addWidget(iid);
+
+    QFrame* line1 = new QFrame(wfavourite);
+    line1->setFrameShape(QFrame::VLine);
+    line1->setFrameShadow(QFrame::Sunken);
+    ilayout->addWidget(line1);
+
+    QLabel* iname = new QLabel("Firstname");
+    iname->setFont(QFont("poppins", 10));
+    iname->setAlignment(Qt::AlignHCenter);
+    ilayout->addWidget(iname);
+
+    QFrame* line2 = new QFrame(wfavourite);
+    line2->setFrameShape(QFrame::VLine);
+    line2->setFrameShadow(QFrame::Sunken);
+    ilayout->addWidget(line2);
+
+    QLabel* ilastname = new QLabel("Lastname");
+    ilastname->setFont(QFont("poppins", 10));
+    ilastname->setAlignment(Qt::AlignHCenter);
+    ilayout->addWidget(ilastname);
+
+    QFrame* line3 = new QFrame(wfavourite);
+    line3->setFrameShape(QFrame::VLine);
+    line3->setFrameShadow(QFrame::Sunken);
+    ilayout->addWidget(line3);
+
+    QLabel* inumber = new QLabel("Number");
+    inumber->setFont(QFont("poppins", 10));
+    inumber->setAlignment(Qt::AlignHCenter);
+    inumber->setContentsMargins(0, 0, 60, 0);
+    inumber->setMinimumWidth(190);
+    ilayout->addWidget(inumber);
+    createfavouritelist();
+    wfavourite->hide();
+}
+void QWMain::createfavouritelist()
+{
+    if (wfavouritescroll)
+        delete wfavouritescroll;
+    wfavouritescroll = new QScrollArea(wfavourite);
+    wfavouritescroll->setGeometry(QRect(0, 20, 600, 380));
+    wfavouritescroll->setWidgetResizable(true);
+
+    QWidget* fcontainer = new QWidget;
+    fcontainer->setGeometry(QRect(0, 0, 600, 380));
+    fcontainer->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 1, stop: 0 #1C1F26, stop: 1 #1E1E1E);");
+    QVBoxLayout* wfavouritelayout = new QVBoxLayout(fcontainer);
+    wfavouritelayout->setContentsMargins(15, 10, 15, 10);
+    wfavouritelayout->setSpacing(10);
+    wfavouritelayout->setAlignment(Qt::AlignTop);
+
+    int n = pg.CountFavourite();
+    std::vector<Contact> contacts = pg.loadShortInfoFavourite();
+    
+    for (int i = 0; i < n; i++)
+    {
+        QPushButton* fcontactframe = new QPushButton();
+        fcontactframe->setFixedSize(550, 50);
+        fcontactframe->setStyleSheet("QPushButton {"
+            "   color: #23272F;"
+            "   border-radius: 25px;"
+            "   background-color: #23272F;"
+            "}"
+            "QPushButton:hover {"
+            "   color: #2D323D;"
+            "   background-color: #2B303B;"
+            "}"
+            "QLabel {"
+            "   font-family: Poppins;"
+            "   font-size: 10pt;"
+            "   background-color: #333742;"
+            "   border-radius: 8px;"
+            "   color: #B8C3D9;"
+            "   text-align: center;"
+            "   qproperty-alignment: AlignCenter;"
+            "}"
+            "QLabel:hover {"
+            "   background-color: #333742;"
+            "   color: #B8C3D9;"
+            "}"
+        );
+        int id = contacts[i].id;
+        connect(fcontactframe, &QPushButton::clicked, this, [=]() {ShowContact(id); });
+        wfavouritelayout->addWidget(fcontactframe);
+        QLabel* fid = new QLabel(fcontactframe);
+        std::cout << "xD";
+        fid->setText(QString::number(contacts[i].id));
+        fid->setGeometry(25, 15, 40, 20);
+        QLabel* ffirstname = new QLabel(fcontactframe);
+        ffirstname->setText(QString::fromStdString(contacts[i].firstname));
+        ffirstname->setGeometry(85, 15, 140, 20);
+        QLabel* flastname = new QLabel(fcontactframe);
+        flastname->setText(QString::fromStdString(contacts[i].lastname));
+        flastname->setGeometry(240, 15, 140, 20);
+        QLabel* fnumber = new QLabel(fcontactframe);
+        fnumber->setText(QString::fromStdString(contacts[i].number));
+        fnumber->setGeometry(400, 15, 120, 20);
+    }
+    wfavouritescroll->setWidget(fcontainer);
+    wfavouritescroll->show();
+}
 void QWMain::createsettings()
 {
     wsettingsbg = new QWidget(this);
@@ -475,8 +595,8 @@ void QWMain::ShowMain()
 		wfavourite->hide();
         waddbg->hide();
         wsettingsbg->hide();
-		wmain->show();
         createlist();
+		wmain->show();
     }
 }
 void QWMain::ShowFavourite()
@@ -486,6 +606,7 @@ void QWMain::ShowFavourite()
 		wmain->hide();
         waddbg->hide();
 		wsettingsbg->hide();
+        createfavouritelist();
 		wfavourite->show();
     }
 }

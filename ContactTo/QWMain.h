@@ -23,8 +23,10 @@ public:
 
 public slots:
     void createnavbar();
-    void createwadd();
     void createlist();
+    void createfavourite();
+    void createfavouritelist();
+    void createwadd();
     void createsettings();
     void ShowMain();
     void ShowFavourite();
@@ -46,6 +48,7 @@ private:
     QWidget* wmain = nullptr;
     QScrollArea* wmainscroll = nullptr;
     QWidget* wfavourite = nullptr;
+    QScrollArea* wfavouritescroll = nullptr;
     QWidget* waddbg = nullptr;
     QWidget* wsettingsbg = nullptr;
     QWidget* wcontactbg = nullptr;
