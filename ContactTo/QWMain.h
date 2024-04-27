@@ -32,14 +32,15 @@ public slots:
     void ShowFavourite();
     void ShowSettings();
     void ShowAdd();
-    void ShowContact(int id);
-    void ShowEdit(FullContact c);
+    void ShowContact(int id, QWidget* w);
+    void ShowEdit(FullContact c, QWidget* w);
     void BackMain();
+    void BackFavourite();
     void BackContact();
     void AddContact(FullContact c);
-    void DeleteContact(int id);
-    void EditContact(FullContact c);
-    void on_pushButton_clicked();//test
+    void DeleteContact(int id, QWidget* w);
+    void EditContact(FullContact c, QWidget* w);
+    void ChangeFavourite(int id, QPushButton* btn);
 
 private:
     Ui::QWMainClass ui;

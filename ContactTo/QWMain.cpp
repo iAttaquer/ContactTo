@@ -14,6 +14,7 @@ QWMain::QWMain(QWidget* parent)
 
     // Main Widget
     wmain = new QWidget(this);
+    wmain->setObjectName("main");
     wmain->setGeometry(QRect(0, 50, 600, 400));
 
     // infobar widget
@@ -319,7 +320,7 @@ void QWMain::createlist()
             "}"
         );
         int id = contacts[i].id;
-        connect(contactframe, &QPushButton::clicked, this, [=]() {ShowContact(id); });
+        connect(contactframe, &QPushButton::clicked, this, [=]() {ShowContact(id, wmain); });
         wmainlayout->addWidget(contactframe);
         QLabel* cid = new QLabel(contactframe);
         cid->setText(QString::number(contacts[i].id));
@@ -340,6 +341,7 @@ void QWMain::createlist()
 void QWMain::createfavourite()
 {
     wfavourite = new QWidget(this);
+    wfavourite->setObjectName("favourite");
     wfavourite->setGeometry(QRect(0, 50, 600, 400));
     wfavourite->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #1C1F26, stop: 1 #1E1E1E);"    );
 
@@ -443,10 +445,10 @@ void QWMain::createfavouritelist()
             "}"
         );
         int id = contacts[i].id;
-        connect(fcontactframe, &QPushButton::clicked, this, [=]() {ShowContact(id); });
+        connect(fcontactframe, &QPushButton::clicked, this, [=]() {ShowContact(id, wfavourite); });
         wfavouritelayout->addWidget(fcontactframe);
         QLabel* fid = new QLabel(fcontactframe);
-        std::cout << "xD";
+        
         fid->setText(QString::number(contacts[i].id));
         fid->setGeometry(25, 15, 40, 20);
         QLabel* ffirstname = new QLabel(fcontactframe);
@@ -630,14 +632,14 @@ void QWMain::ShowAdd()
         waddbg->show();
     }
 }
-void QWMain::ShowContact(int id)
+void QWMain::ShowContact(int id, QWidget* w)
 {
     FullContact contact = pg.loadAllInfo(id);
     if (contact.firstname.empty() && contact.number.empty()) return;
     
-    if (wmain->isVisible())
+    if (w->isVisible())
     {
-        wmain->hide();
+        w->hide();
     }
     if (navbar->isVisible())
     {
@@ -669,7 +671,10 @@ void QWMain::ShowContact(int id)
     cback->setGeometry(10, 5, 40, 40);
     cback->setIcon(QIcon(":/images/images/back_icon.svg"));
     cback->setIconSize(QSize(20, 20));
-    connect(cback, SIGNAL(clicked()), this, SLOT(BackMain()));
+    if (w->objectName() == "main")
+        connect(cback, SIGNAL(clicked()), this, SLOT(BackMain()));
+    else
+        connect(cback, SIGNAL(clicked()), this, SLOT(BackFavourite()));
 
     QFrame* clayout = new QFrame(wcontact);
     clayout->setGeometry(0, 50, 550, 350);
@@ -764,23 +769,35 @@ void QWMain::ShowContact(int id)
     cposition->setText(QString::fromStdString(contact.position));
     cposition->setGeometry(295, 276, 200, 25);
 
+    QPushButton* cfavourite = new QPushButton(cnavbar);
+    cfavourite->setGeometry(400, 5, 40, 40);
+    if (pg.IsFavourite(id))
+        cfavourite->setIcon(QIcon(":/images/images/star-solid.svg"));
+    else
+        cfavourite->setIcon(QIcon(":/images/images/star-regular.svg"));
+    cfavourite->setIconSize(QSize(18, 18));
+    connect(cfavourite, &QPushButton::clicked, this, [=]() {
+        ChangeFavourite(id, cfavourite);
+        });
+
+
     QPushButton* cedit = new QPushButton(cnavbar);
     cedit->setGeometry(450, 5, 40, 40);
     cedit->setIcon(QIcon(":/images/images/edit_icon.svg"));
     cedit->setIconSize(QSize(18, 18));
-    connect(cedit, &QPushButton::clicked, this, [=]() {ShowEdit(contact); });
+    connect(cedit, &QPushButton::clicked, this, [=]() {ShowEdit(contact, w); });
 
     QPushButton* cdelete = new QPushButton(cnavbar);
     cdelete->setGeometry(500, 5, 40, 40);
     cdelete->setIcon(QIcon(":/images/images/trash_icon.svg"));
     connect(cdelete, &QPushButton::clicked, this, [=]() {
-        DeleteContact(contact.id);
+        DeleteContact(contact.id, w);
         });
 
     wcontactbg->show();
     
 }
-void QWMain::ShowEdit(FullContact c)
+void QWMain::ShowEdit(FullContact c, QWidget* w)
 {
     if (wcontactbg->isVisible())
     {
@@ -946,7 +963,7 @@ void QWMain::ShowEdit(FullContact c)
             eposition->text().toStdString(),
             eemail->text().toStdString(),
             enickname->text().toStdString()
-        ));
+        ), w);
         });
     weditbg->show();
 }
@@ -962,6 +979,19 @@ void QWMain::BackMain()
         wmain->show();
     }
 }
+
+void QWMain::BackFavourite()
+{
+    if (wcontactbg->isVisible())
+    {
+        delete wcontactbg;
+        wcontactbg = nullptr;
+        navbar->show();
+        createfavouritelist();
+        wfavourite->show();
+    }
+}
+
 
 void QWMain::BackContact()
 {
@@ -988,18 +1018,22 @@ void QWMain::AddContact(FullContact c)
     }
     
 }
-void QWMain::DeleteContact(int id)
+void QWMain::DeleteContact(int id, QWidget* w)
 {
+    pg.DeleteFavourite(id);
     if (pg.Delete(id))
     {
         QMessageBox::information(this, "Success!", "Contact Deleted!");
-        BackMain();
+        if (w->objectName() == "main")
+            BackMain();
+        else
+            BackFavourite();
     }
     else {
         QMessageBox::warning(this, "Error!", "Contact has not been deleted!");
     }
 }
-void QWMain::EditContact(FullContact c)
+void QWMain::EditContact(FullContact c, QWidget* w)
 {
     if (c.firstname.size() == 0 || c.number.size() == 0)
     {
@@ -1010,13 +1044,20 @@ void QWMain::EditContact(FullContact c)
         QMessageBox::information(this, "Success!", "Contact changed!");
         delete weditbg;
         weditbg = nullptr; 
-        ShowContact(c.id);
-
+        ShowContact(c.id, w);
     }
 }
-//test
-void QWMain::on_pushButton_clicked()
+
+void QWMain::ChangeFavourite(int id, QPushButton* btn)
 {
-    QMessageBox::warning(this, "Warning", QString::number(pg.Delete(12)));
-    pg.loadShortInfo();
+    if (pg.IsFavourite(id))
+    {
+        pg.DeleteFavourite(id);
+        btn->setIcon(QIcon(":/images/images/star-regular.svg"));
+    }
+    else
+    {
+        pg.AddFavourite(id);
+        btn->setIcon(QIcon(":/images/images/star-solid.svg"));
+    }
 }

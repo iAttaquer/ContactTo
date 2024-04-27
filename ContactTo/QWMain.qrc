@@ -8,5 +8,7 @@
         <file>images/trash_icon.svg</file>
         <file>images/edit_icon.svg</file>
         <file>images/save_icon.svg</file>
+        <file>images/star-solid.svg</file>
+        <file>images/star-regular.svg</file>
     </qresource>
 </RCC>
