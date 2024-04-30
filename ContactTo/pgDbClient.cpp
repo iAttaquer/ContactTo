@@ -57,6 +57,19 @@ void pgDbClient::setSettings(std::string h, std::string d, std::string u, std::s
 	createstring();
 }
 
+bool pgDbClient::IsConnection() const
+{
+	try {
+		pqxx::connection pgConnection(connection);
+		if (pgConnection.is_open())
+			return true;
+	}
+	catch (const std::exception& e) {
+		std::cerr << e.what() << std::endl;
+	}
+	return false;
+}
+
 int pgDbClient::Count() const
 {
 	try{

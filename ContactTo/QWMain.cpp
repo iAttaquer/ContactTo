@@ -8,6 +8,7 @@ QWMain::QWMain(QWidget* parent)
     ui.setupUi(this);
     this->setWindowTitle("ContactTo");
 	this->setFixedSize(600, 450);
+    
 
 	// Navigation Bar
     createnavbar();
@@ -287,9 +288,27 @@ void QWMain::createlist()
     QVBoxLayout* wmainlayout = new QVBoxLayout(scontainer);
     wmainlayout->setContentsMargins(15, 10, 15, 10);
     wmainlayout->setSpacing(10);
-    wmainlayout->setAlignment(Qt::AlignTop);
+    wmainlayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+
+    if (!pg.IsConnection())
+    {
+        QLabel* info = new QLabel();
+        info->setText("Failed to connect to database");
+        wmainlayout->addWidget(info);
+        wmainscroll->setWidget(scontainer);
+        wmainscroll->show();
+        return;
+    }
 
     int n = pg.Count();
+
+    if (n == 0)
+    {
+        QLabel* info = new QLabel();
+        info->setText("Add some contacts to display");
+        wmainlayout->addWidget(info);
+    }
+
     std::vector<Contact> contacts = pg.loadShortInfo();
 
     for (int i = 0; i < n; i++)
@@ -412,9 +431,27 @@ void QWMain::createfavouritelist()
     QVBoxLayout* wfavouritelayout = new QVBoxLayout(fcontainer);
     wfavouritelayout->setContentsMargins(15, 10, 15, 10);
     wfavouritelayout->setSpacing(10);
-    wfavouritelayout->setAlignment(Qt::AlignTop);
+    wfavouritelayout->setAlignment(Qt::AlignTop | Qt::AlignHCenter);
+
+    if (!pg.IsConnection())
+    {
+        QLabel* info = new QLabel();
+        info->setText("Failed to connect to database");
+        wfavouritelayout->addWidget(info);
+        wfavouritescroll->setWidget(fcontainer);
+        wfavouritescroll->show();
+        return;
+    }
 
     int n = pg.CountFavourite();
+
+    if (n == 0)
+    {
+        QLabel* info = new QLabel();
+        info->setText("Add some contacts to favourite");
+        wfavouritelayout->addWidget(info);
+    }
+
     std::vector<Contact> contacts = pg.loadShortInfoFavourite();
     
     for (int i = 0; i < n; i++)
@@ -1015,6 +1052,10 @@ void QWMain::AddContact(FullContact c)
     else if (pg.Add(c))
     {
         QMessageBox::information(this, "Success!", "Contact Added!");
+    }
+    else
+    {
+        QMessageBox::warning(this, "Error!", "Connection failed to database!");
     }
     
 }
