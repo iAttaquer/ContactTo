@@ -101,3 +101,6 @@ ALTER TABLE IF EXISTS public."ULUBIONE"
 ### Dependencies
 - libpqxx - C++ interface to PostgreSQL
 - Qt - C++ framework to make GUI
+
+
+This project is licensed under the LGPLv3 license - see the [LICENSE.LGPL](LICENSE.LGPL) file for details.
